@@ -1,0 +1,3371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Dream Hunt | My Profile</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Inter,Arial,Helvetica,sans-serif;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:#f4f7fb;
+    color:#172033;
+    overflow-x:hidden;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.header{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    background:rgba(255,255,255,.92);
+    backdrop-filter:blur(16px);
+    border-bottom:1px solid #e5e7eb;
+}
+
+.header-inner{
+    max-width:1150px;
+    margin:auto;
+    min-height:68px;
+    padding:0 18px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+}
+
+.logo{
+    text-decoration:none;
+    color:#111827;
+    font-size:22px;
+    font-weight:900;
+    letter-spacing:-.5px;
+}
+
+.logo span{
+    color:#2563eb;
+}
+
+.nav{
+    display:flex;
+    align-items:center;
+    gap:7px;
+}
+
+.nav a{
+    text-decoration:none;
+    color:#475467;
+    font-size:13px;
+    font-weight:600;
+    padding:9px 11px;
+    border-radius:9px;
+}
+
+.nav a:hover,
+.nav a.active{
+    background:#eff6ff;
+    color:#2563eb;
+}
+
+.back{
+    background:#111827!important;
+    color:white!important;
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.container{
+    max-width:1050px;
+    margin:auto;
+    padding:28px 18px 60px;
+}
+
+/* =========================
+   HERO
+========================= */
+
+.profile-hero{
+    position:relative;
+    overflow:hidden;
+    background:
+        radial-gradient(circle at 90% 10%,rgba(96,165,250,.35),transparent 30%),
+        radial-gradient(circle at 10% 90%,rgba(37,99,235,.28),transparent 30%),
+        linear-gradient(135deg,#0f172a,#172554,#1d4ed8);
+    color:white;
+    border-radius:22px;
+    padding:30px;
+    margin-bottom:20px;
+    box-shadow:0 15px 40px rgba(30,64,175,.16);
+}
+
+.hero-glow{
+    position:absolute;
+    width:170px;
+    height:170px;
+    border-radius:50%;
+    background:rgba(255,255,255,.05);
+    right:-50px;
+    bottom:-70px;
+}
+
+.hero-content{
+    position:relative;
+    z-index:2;
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+
+.avatar-wrap{
+    position:relative;
+    flex-shrink:0;
+}
+
+.big-avatar{
+    width:92px;
+    height:92px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(255,255,255,.14);
+    border:3px solid rgba(255,255,255,.4);
+    font-size:30px;
+    font-weight:900;
+    overflow:hidden;
+    box-shadow:0 8px 25px rgba(0,0,0,.18);
+}
+
+.big-avatar img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.camera{
+    position:absolute;
+    right:-3px;
+    bottom:-3px;
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    border:3px solid #172554;
+    background:white;
+    color:#2563eb;
+    cursor:pointer;
+    font-size:14px;
+}
+
+.hero-text h1{
+    font-size:27px;
+    margin-bottom:5px;
+}
+
+.hero-text p{
+    color:#dbeafe;
+    font-size:13px;
+    word-break:break-word;
+}
+
+.status{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    margin-top:10px;
+    background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.15);
+    padding:6px 10px;
+    border-radius:20px;
+    font-size:11px;
+}
+
+.status-dot{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:#34d399;
+}
+
+/* =========================
+   ACTIONS
+========================= */
+
+.hero-actions{
+    margin-left:auto;
+    display:flex;
+    gap:8px;
+}
+
+.btn{
+    border:0;
+    cursor:pointer;
+    padding:11px 15px;
+    border-radius:10px;
+    font-size:13px;
+    font-weight:700;
+}
+
+.btn-primary{
+    background:white;
+    color:#172554;
+}
+
+.btn-dark{
+    background:#111827;
+    color:white;
+}
+
+.btn-light{
+    background:#f1f5f9;
+    color:#172033;
+}
+
+.btn-danger{
+    background:#fee2e2;
+    color:#b42318;
+}
+
+/* =========================
+   MESSAGE
+========================= */
+
+.message{
+    display:none;
+    padding:13px 15px;
+    border-radius:11px;
+    margin-bottom:18px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.message.success{
+    background:#ecfdf3;
+    color:#027a48;
+    border:1px solid #abefc6;
+}
+
+.message.error{
+    background:#fef3f2;
+    color:#b42318;
+    border:1px solid #fecdca;
+}
+
+/* =========================
+   SECTION
+========================= */
+
+.section{
+    background:white;
+    border:1px solid #e5e7eb;
+    border-radius:17px;
+    padding:22px;
+    margin-bottom:18px;
+    box-shadow:0 5px 18px rgba(15,23,42,.035);
+}
+
+.section-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-bottom:18px;
+}
+
+.section-title{
+    display:flex;
+    align-items:center;
+    gap:9px;
+}
+
+.section-icon{
+    width:35px;
+    height:35px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:10px;
+    background:#eff6ff;
+    color:#2563eb;
+}
+
+.section-title h2{
+    font-size:17px;
+}
+
+.section-title p{
+    color:#98a2b3;
+    font-size:11px;
+    margin-top:2px;
+}
+
+/* =========================
+   GRID
+========================= */
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:13px;
+}
+
+.field{
+    min-width:0;
+}
+
+.field.full{
+    grid-column:1/-1;
+}
+
+.field label{
+    display:block;
+    font-size:11px;
+    font-weight:700;
+    color:#667085;
+    margin-bottom:6px;
+}
+
+.value{
+    min-height:44px;
+    background:#f8fafc;
+    border:1px solid #edf0f4;
+    border-radius:10px;
+    padding:12px;
+    font-size:13px;
+    font-weight:600;
+    word-break:break-word;
+    overflow-wrap:anywhere;
+}
+
+/* =========================
+   EDIT INPUT
+========================= */
+
+input,
+select,
+textarea{
+    width:100%;
+    border:1px solid #d9dee8;
+    background:white;
+    border-radius:10px;
+    padding:12px;
+    outline:none;
+    color:#172033;
+    font-size:13px;
+    transition:.2s;
+}
+
+textarea{
+    min-height:90px;
+    resize:vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+    border-color:#60a5fa;
+    box-shadow:0 0 0 3px rgba(37,99,235,.08);
+}
+
+/* =========================
+   EDIT MODE
+========================= */
+
+.edit-only{
+    display:none;
+}
+
+.editing .view-only{
+    display:none;
+}
+
+.editing .edit-only{
+    display:block;
+}
+
+.save-bar{
+    display:none;
+    position:sticky;
+    bottom:15px;
+    z-index:50;
+    background:rgba(255,255,255,.95);
+    backdrop-filter:blur(15px);
+    border:1px solid #dbe3ef;
+    border-radius:15px;
+    padding:12px;
+    box-shadow:0 10px 35px rgba(15,23,42,.12);
+}
+
+.editing .save-bar{
+    display:flex;
+    justify-content:flex-end;
+    gap:9px;
+}
+
+/* =========================
+   PROFILE PHOTO
+========================= */
+
+.photo-actions{
+    display:none;
+    margin-top:10px;
+    gap:8px;
+}
+
+.editing .photo-actions{
+    display:flex;
+}
+
+.photo-actions button{
+    border:0;
+    padding:7px 10px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:11px;
+    font-weight:700;
+}
+
+/* =========================
+   LOADING
+========================= */
+
+#loading{
+    position:fixed;
+    inset:0;
+    background:#f4f7fb;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap:12px;
+    color:#2563eb;
+    font-weight:700;
+    z-index:9999;
+}
+
+.loader{
+    width:35px;
+    height:35px;
+    border:3px solid #dbeafe;
+    border-top-color:#2563eb;
+    border-radius:50%;
+    animation:spin .8s linear infinite;
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,.55);
+    backdrop-filter:blur(5px);
+    align-items:center;
+    justify-content:center;
+    padding:18px;
+    z-index:5000;
+}
+
+.modal-box{
+    width:100%;
+    max-width:430px;
+    background:white;
+    border-radius:17px;
+    padding:22px;
+}
+
+.modal-box h3{
+    margin-bottom:7px;
+}
+
+.modal-box p{
+    color:#667085;
+    font-size:12px;
+    line-height:1.5;
+    margin-bottom:15px;
+}
+
+.modal-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:8px;
+    margin-top:12px;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:760px){
+
+    .header-inner{
+        min-height:62px;
+    }
+
+    .nav a:not(.back){
+        display:none;
+    }
+
+    .container{
+        padding:16px 12px 45px;
+    }
+
+    .profile-hero{
+        padding:20px 16px;
+        border-radius:17px;
+    }
+
+    .hero-content{
+        flex-wrap:wrap;
+        gap:14px;
+    }
+
+    .big-avatar{
+        width:70px;
+        height:70px;
+        font-size:24px;
+    }
+
+    .hero-text{
+        min-width:0;
+        flex:1;
+    }
+
+    .hero-text h1{
+        font-size:20px;
+    }
+
+    .hero-text p{
+        font-size:11px;
+    }
+
+    .hero-actions{
+        width:100%;
+        margin-left:0;
+    }
+
+    .hero-actions .btn{
+        flex:1;
+    }
+
+    .section{
+        padding:17px 14px;
+        border-radius:14px;
+    }
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .field.full{
+        grid-column:auto;
+    }
+
+    .section-title h2{
+        font-size:15px;
+    }
+
+}
+
+/* =========================
+   VERY SMALL
+========================= */
+
+@media(max-width:380px){
+
+    .logo{
+        font-size:19px;
+    }
+
+    .container{
+        padding-left:9px;
+        padding-right:9px;
+    }
+
+    .profile-hero{
+        padding:17px 12px;
+    }
+
+    .section{
+        padding:14px 11px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- LOADING -->
+
+<div id="loading">
+    <div class="loader"></div>
+    Loading your profile...
+</div>
+
+
+<!-- HEADER -->
+
+<header class="header">
+
+    <div class="header-inner">
+
+        <a href="dashboard.html" class="logo">
+            Dream <span>Hunt</span>
+        </a>
+
+        <nav class="nav">
+
+            <a href="dashboard.html">Dashboard</a>
+            <a href="enrolled-courses.html">Courses</a>
+            <a href="exams.html">Exams</a>
+            <a href="notifications.html">Notifications</a>
+
+            <a href="dashboard.html" class="back">
+                ← Dashboard
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+<main class="container">
+
+    <!-- HERO -->
+
+    <section class="profile-hero">
+
+        <div class="hero-glow"></div>
+
+        <div class="hero-content">
+
+            <div class="avatar-wrap">
+
+                <div class="big-avatar" id="bigAvatar">
+                    S
+                </div>
+
+                <button
+                    class="camera"
+                    onclick="openPhotoPicker()"
+                    title="Change profile picture"
+                >
+                    📷
+                </button>
+
+            </div>
+
+
+            <div class="hero-text">
+
+                <h1 id="profileName">
+                    Student
+                </h1>
+
+                <p id="profileEmail">
+                    Loading...
+                </p>
+
+                <div class="status">
+                    <span class="status-dot"></span>
+                    <span id="accountStatus">
+                        Active Dream Hunt Student
+                    </span>
+                </div>
+
+            </div>
+
+
+            <div class="hero-actions">
+
+                <button
+                    class="btn btn-primary"
+                    onclick="enableEdit()"
+                    id="editButton"
+                >
+                    ✏️ Edit Profile
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="photo-actions">
+
+            <button
+                class="btn-light"
+                onclick="openPhotoPicker()"
+            >
+                📷 Change Photo
+            </button>
+
+            <button
+                class="btn-danger"
+                onclick="removePhoto()"
+            >
+                Remove Photo
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- MESSAGE -->
+
+    <div id="message" class="message"></div>
+
+
+    <!-- BASIC -->
+
+    <section class="section">
+
+        <div class="section-head">
+
+            <div class="section-title">
+
+                <div class="section-icon">
+                    👤
+                </div>
+
+                <div>
+                    <h2>Basic Information</h2>
+                    <p>Your personal information</p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="grid">
+
+            <div class="field">
+
+                <label>Full Name</label>
+
+                <div
+                    class="value view-only"
+                    id="fullNameView"
+                >
+                    —
+                </div>
+
+                <div class="edit-only">
+                    <input
+                        id="fullNameInput"
+                        type="text"
+                        placeholder="Enter your full name"
+                    >
+                </div>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Email Address</label>
+
+                <div
+                    class="value"
+                    id="emailView"
+                >
+                    —
+                </div>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Phone Number</label>
+
+                <div
+                    class="value view-only"
+                    id="phoneView"
+                >
+                    —
+                </div>
+
+                <div class="edit-only">
+                    <input
+                        id="phoneInput"
+                        type="tel"
+                        placeholder="01XXXXXXXXX"
+                    >
+                </div>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Date of Birth</label>
+
+                <div
+                    class="value view-only"
+                    id="dobView"
+                >
+                    —
+                </div>
+
+                <div class="edit-only">
+                    <input
+                        id="dobInput"
+                        type="date"
+                    >
+                </div>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Gender</label>
+
+                <div
+                    class="value view-only"
+                    id="genderView"
+                >
+                    —
+                </div>
+
+                <div class="edit-only">
+
+                    <select id="genderInput">
+
+                        <option value="">
+                            Select gender
+                        </option>
+
+                        <option value="Male">
+                            Male
+                        </option>
+
+                        <option value="Female">
+                            Female
+                        </option>
+
+                        <option value="Other">
+                            Other
+                        </option>
+
+                        <option value="Prefer not to say">
+                            Prefer not to say
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Blood Group</label>
+
+                <div
+                    class="value view-only"
+                    id="bloodGroupView"
+                >
+                    —
+                </div>
+
+                <div class="edit-only">
+
+                    <select id="bloodGroupInput">
+
+                        <option value="">
+                            Select blood group
+                        </option>
+
+                        <option>A+</option>
+                        <option>A-</option>
+                        <option>B+</option>
+                        <option>B-</option>
+                        <option>AB+</option>
+                        <option>AB-</option>
+                        <option>O+</option>
+                        <option>O-</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FAMILY -->
+
+    <section class="section">
+
+        <div class="section-head">
+
+            <div class="section-title">
+
+                <div class="section-icon">
+                    👨‍👩‍👦
+                </div>
+
+                <div>
+                    <h2>Family Information</h2>
+                    <p>Parent and guardian details</p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="grid">
+
+            <div class="field">
+
+                <label>Father's Name</label>
+
+                <div
+                    class="value view-only"
+                    id="fatherNameView"
+                >
+                    —
+                </div>
+
+                <div class="edit-only">
+
+                    <input
+                        id="fatherNameInput"
+                        placeholder="Father's full name"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Father's Phone</label>
+
+                <div
+                    class="value view-only"
+                    id="fatherPhoneView"
+                >
+                    —
+                </div>
+
+                <div class="edit-only">
+
+                    <input
+                        id="fatherPhoneInput"
+                        type="tel"
+                        placeholder="Father's phone number"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Mother's Name</label>
+
+                <div
+                    class="value view-only"
+                    id="motherNameView"
+                >
+                    —
+                </div>
+
+                <div class="edit-only">
+
+                    <input
+                        id="motherNameInput"
+                        placeholder="Mother's full name"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Mother's Phone</label>
+
+                <div
+                    class="value view-only"
+                    id="motherPhoneView"
+                >
+                    —
+                </div>
+
+                <div class="edit-only">
+
+                    <input
+                        id="motherPhoneInput"
+                        type="tel"
+                        placeholder="Mother's phone number"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Guardian Name</label>
+
+                <div
+                    class="value view-only"
+                    id="guardianNameView"
+                >
+                    —
+                </div>
+
+                <div class="edit-only">
+
+                    <input
+                        id="guardianNameInput"
+                        placeholder="Guardian name"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Guardian Phone</label>
+
+                <div
+                    class="value view-only"
+                    id="guardianPhoneView"
+                >
+                    —
+                </div>
+
+                <div class="edit-only">
+
+                    <input
+                        id="guardianPhoneInput"
+                        type="tel"
+                        placeholder="Guardian phone"
+                    >
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ACADEMIC -->
+
+    <section class="section">
+
+        <div class="section-head">
+
+            <div class="section-title">
+
+                <div class="section-icon">
+                    🎓
+                </div>
+
+                <div>
+                    <h2>Academic Information</h2>
+                    <p>Your education details</p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="grid">
+
+            <div class="field full">
+
+                <label>College / Institution Name</label>
+
+                <div
+                    class="value view-only"
+                    id="institutionView"
+                >
+                    —
+                </div>
+
+                <div class="edit-only">
+
+                    <input
+                        id="institutionInput"
+                        placeholder="College / institution name"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Education Board</label>
+
+                <div
+                    class="value view-only"
+                    id="boardView"
+                >
+                    —
+                </div>
+
+                <div class="edit-only">
+
+                    <select id="boardInput">
+
+                        <option value="">
+                            Select board
+                        </option>
+
+                        <option>Dhaka</option>
+                        <option>Chattogram</option>
+                        <option>Rajshahi</option>
+                        <option>Comilla</option>
+                        <option>Jashore</option>
+                        <option>Barishal</option>
+                        <option>Sylhet</option>
+                        <option>Dinajpur</option>
+                        <option>Mymensingh</option>
+                        <option>Madrasah</option>
+                        <option>Technical</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Group</label>
+
+                <div
+                    class="value view-only"
+                    id="groupView"
+                >
+                    —
+                </div>
+
+                <div class="edit-only">
+
+                    <select id="groupInput">
+
+                        <option value="">
+                            Select group
+                        </option>
+
+                        <option>Science</option>
+                        <option>Business Studies</option>
+                        <option>Humanities</option>
+                        <option>Other</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>HSC / Equivalent Year</label>
+
+                <div
+                    class="value view-only"
+                    id="hscYearView"
+                >
+                    —
+                </div>
+
+                <div class="edit-only">
+
+                    <input
+                        id="hscYearInput"
+                        type="number"
+                        placeholder="2026"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>HSC Roll</label>
+
+                <div
+                    class="value view-only"
+                    id="hscRollView"
+                >
+                    —
+                </div>
+
+                <div class="edit-only">
+
+                    <input
+                        id="hscRollInput"
+                        placeholder="HSC roll number"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>HSC Registration</label>
+
+                <div
+                    class="value view-only"
+                    id="hscRegView"
+                >
+                    —
+                </div>
+
+                <div class="edit-only">
+
+                    <input
+                        id="hscRegInput"
+                        placeholder="HSC registration number"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="field full">
+
+                <label>SSC Institution</label>
+
+                <div
+                    class="value view-only"
+                    id="sscInstitutionView"
+                >
+                    —
+                </div>
+
+                <div class="edit-only">
+
+                    <input
+                        id="sscInstitutionInput"
+                        placeholder="SSC school name"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>SSC Board</label>
+
+                <div
+                    class="value view-only"
+                    id="sscBoardView"
+                >
+                    —
+                </div>
+
+                <div class="edit-only">
+
+                    <select id="sscBoardInput">
+
+                        <option value="">
+                            Select board
+                        </option>
+
+                        <option>Dhaka</option>
+                        <option>Chattogram</option>
+                        <option>Rajshahi</option>
+                        <option>Comilla</option>
+                        <option>Jashore</option>
+                        <option>Barishal</option>
+                        <option>Sylhet</option>
+                        <option>Dinajpur</option>
+                        <option>Mymensingh</option>
+                        <option>Madrasah</option>
+                        <option>Technical</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>SSC Passing Year</label>
+
+                <div
+                    class="value view-only"
+                    id="sscYearView"
+                >
+                    —
+                </div>
+
+                <div class="edit-only">
+
+                    <input
+                        id="sscYearInput"
+                        type="number"
+                        placeholder="2024"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>SSC GPA</label>
+
+                <div
+                    class="value view-only"
+                    id="sscGpaView"
+                >
+                    —
+                </div>
+
+                <div class="edit-only">
+
+                    <input
+                        id="sscGpaInput"
+                        type="text"
+                        placeholder="5.00"
+                    >
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- LOCATION -->
+
+    <section class="section">
+
+        <div class="section-head">
+
+            <div class="section-title">
+
+                <div class="section-icon">
+                    📍
+                </div>
+
+                <div>
+                    <h2>Location & Address</h2>
+                    <p>Your residential information</p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="grid">
+
+            <div class="field">
+
+                <label>Division</label>
+
+                <div
+                    class="value view-only"
+                    id="divisionView"
+                >
+                    —
+                </div>
+
+                <div class="edit-only">
+
+                    <select id="divisionInput">
+
+                        <option value="">
+                            Select division
+                        </option>
+
+                        <option>Dhaka</option>
+                        <option>Chattogram</option>
+                        <option>Rajshahi</option>
+                        <option>Khulna</option>
+                        <option>Barishal</option>
+                        <option>Sylhet</option>
+                        <option>Rangpur</option>
+                        <option>Mymensingh</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>District</label>
+
+                <div
+                    class="value view-only"
+                    id="districtView"
+                >
+                    —
+                </div>
+
+                <div class="edit-only">
+
+                    <input
+                        id="districtInput"
+                        placeholder="District"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Upazila / Thana</label>
+
+                <div
+                    class="value view-only"
+                    id="upazilaView"
+                >
+                    —
+                </div>
+
+                <div class="edit-only">
+
+                    <input
+                        id="upazilaInput"
+                        placeholder="Upazila / Thana"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="field full">
+
+                <label>Full Address</label>
+
+                <div
+                    class="value view-only"
+                    id="addressView"
+                >
+                    —
+                </div>
+
+                <div class="edit-only">
+
+                    <textarea
+                        id="addressInput"
+                        placeholder="House, road, area, village etc."
+                    ></textarea>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ADMISSION -->
+
+    <section class="section">
+
+        <div class="section-head">
+
+            <div class="section-title">
+
+                <div class="section-icon">
+                    🎯
+                </div>
+
+                <div>
+                    <h2>Admission Goal</h2>
+                    <p>Your future target</p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="grid">
+
+            <div class="field">
+
+                <label>Target Admission</label>
+
+                <div
+                    class="value view-only"
+                    id="targetAdmissionView"
+                >
+                    —
+                </div>
+
+                <div class="edit-only">
+
+                    <select id="targetAdmissionInput">
+
+                        <option value="">
+                            Select target
+                        </option>
+
+                        <option>Engineering</option>
+                        <option>Medical</option>
+                        <option>Dental</option>
+                        <option>Agriculture & Veterinary</option>
+                        <option>Textile</option>
+                        <option>Public University</option>
+                        <option>Abroad</option>
+                        <option>Multiple</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Target University</label>
+
+                <div
+                    class="value view-only"
+                    id="targetUniversityView"
+                >
+                    —
+                </div>
+
+                <div class="edit-only">
+
+                    <input
+                        id="targetUniversityInput"
+                        placeholder="e.g. DU, BUET, MIST..."
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Dream Subject</label>
+
+                <div
+                    class="value view-only"
+                    id="dreamSubjectView"
+                >
+                    —
+                </div>
+
+                <div class="edit-only">
+
+                    <input
+                        id="dreamSubjectInput"
+                        placeholder="Your preferred subject"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Career Goal</label>
+
+                <div
+                    class="value view-only"
+                    id="careerGoalView"
+                >
+                    —
+                </div>
+
+                <div class="edit-only">
+
+                    <input
+                        id="careerGoalInput"
+                        placeholder="Your career goal"
+                    >
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- PERSONAL -->
+
+    <section class="section">
+
+        <div class="section-head">
+
+            <div class="section-title">
+
+                <div class="section-icon">
+                    ✨
+                </div>
+
+                <div>
+                    <h2>About You</h2>
+                    <p>Additional personal details</p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="grid">
+
+            <div class="field">
+
+                <label>Username / Nickname</label>
+
+                <div
+                    class="value view-only"
+                    id="nicknameView"
+                >
+                    —
+                </div>
+
+                <div class="edit-only">
+
+                    <input
+                        id="nicknameInput"
+                        placeholder="Nickname"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Preferred Language</label>
+
+                <div
+                    class="value view-only"
+                    id="languageView"
+                >
+                    —
+                </div>
+
+                <div class="edit-only">
+
+                    <select id="languageInput">
+
+                        <option value="">
+                            Select language
+                        </option>
+
+                        <option>Bangla</option>
+                        <option>English</option>
+                        <option>Bangla & English</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="field full">
+
+                <label>About Me</label>
+
+                <div
+                    class="value view-only"
+                    id="aboutView"
+                >
+                    —
+                </div>
+
+                <div class="edit-only">
+
+                    <textarea
+                        id="aboutInput"
+                        placeholder="Tell something about yourself..."
+                    ></textarea>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ACCOUNT -->
+
+    <section class="section">
+
+        <div class="section-head">
+
+            <div class="section-title">
+
+                <div class="section-icon">
+                    🔐
+                </div>
+
+                <div>
+                    <h2>Account Information</h2>
+                    <p>Dream Hunt account details</p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="grid">
+
+            <div class="field">
+
+                <label>Email</label>
+
+                <div
+                    class="value"
+                    id="accountEmail"
+                >
+                    —
+                </div>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Account Created</label>
+
+                <div
+                    class="value"
+                    id="createdAt"
+                >
+                    —
+                </div>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Email Verification</label>
+
+                <div
+                    class="value"
+                    id="verification"
+                >
+                    —
+                </div>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Account ID</label>
+
+                <div
+                    class="value"
+                    id="accountId"
+                >
+                    —
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- SAVE BAR -->
+
+    <div class="save-bar">
+
+        <button
+            class="btn btn-light"
+            onclick="cancelEdit()"
+        >
+            Cancel
+        </button>
+
+        <button
+            class="btn btn-dark"
+            onclick="saveProfile()"
+            id="saveButton"
+        >
+            💾 Save Changes
+        </button>
+
+    </div>
+
+
+</main>
+
+
+<!-- PHOTO INPUT -->
+
+<input
+    type="file"
+    id="photoInput"
+    accept="image/*"
+    style="display:none"
+    onchange="handlePhoto(event)"
+>
+
+
+<script>
+
+/* =========================================================
+   SUPABASE
+========================================================= */
+
+const SUPABASE_URL =
+    "https://rndtgjuwwsxxiiezennr.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_mIQfKUUsEOlDtqEdroMpgQ_I8ElRcsN";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
+
+
+let currentUser = null;
+let currentProfile = null;
+let currentMetadata = {};
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function clean(value){
+
+    if(
+        value === null ||
+        value === undefined ||
+        value === ""
+    ){
+
+        return "Not provided";
+
+    }
+
+    return String(value);
+
+}
+
+
+function getValue(){
+
+    const id =
+        arguments[0];
+
+    const profileKeys =
+        arguments[1] || [];
+
+    const metadataKeys =
+        arguments[2] || [];
+
+
+    for(const key of profileKeys){
+
+        if(
+            currentProfile &&
+            currentProfile[key] !== null &&
+            currentProfile[key] !== undefined &&
+            currentProfile[key] !== ""
+        ){
+
+            return currentProfile[key];
+
+        }
+
+    }
+
+
+    for(const key of metadataKeys){
+
+        if(
+            currentMetadata &&
+            currentMetadata[key] !== null &&
+            currentMetadata[key] !== undefined &&
+            currentMetadata[key] !== ""
+        ){
+
+            return currentMetadata[key];
+
+        }
+
+    }
+
+
+    return "";
+
+}
+
+
+function setText(id,value){
+
+    const element =
+        document.getElementById(id);
+
+    if(element){
+
+        element.textContent =
+            clean(value);
+
+    }
+
+}
+
+
+function setInput(id,value){
+
+    const element =
+        document.getElementById(id);
+
+    if(element){
+
+        element.value =
+            value || "";
+
+    }
+
+}
+
+
+function showMessage(text,isError=false){
+
+    const box =
+        document.getElementById("message");
+
+    box.textContent =
+        text;
+
+    box.className =
+        "message " +
+        (isError ? "error" : "success");
+
+    box.style.display =
+        "block";
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+    setTimeout(function(){
+
+        box.style.display =
+            "none";
+
+    },4500);
+
+}
+
+
+/* =========================================================
+   LOAD PROFILE
+========================================================= */
+
+async function loadProfile(){
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient.auth.getSession();
+
+
+        if(
+            error ||
+            !data.session
+        ){
+
+            window.location.href =
+                "index.html";
+
+            return;
+
+        }
+
+
+        currentUser =
+            data.session.user;
+
+
+        currentMetadata =
+            currentUser.user_metadata || {};
+
+
+        /* PROFILE TABLE */
+
+        const {
+            data:profile,
+            error:profileError
+        } =
+            await supabaseClient
+                .from("profiles")
+                .select("*")
+                .eq("id",currentUser.id)
+                .maybeSingle();
+
+
+        if(profileError){
+
+            console.log(
+                "Profile table:",
+                profileError.message
+            );
+
+        }
+
+
+        currentProfile =
+            profile || {};
+
+
+        renderProfile();
+
+
+        document.getElementById(
+            "loading"
+        ).style.display =
+            "none";
+
+
+    }catch(error){
+
+        console.error(error);
+
+        document.getElementById(
+            "loading"
+        ).innerHTML =
+            "Unable to load profile.";
+
+    }
+
+}
+
+
+/* =========================================================
+   RENDER PROFILE
+========================================================= */
+
+function renderProfile(){
+
+    const name =
+        getValue(
+            "name",
+            ["full_name"],
+            ["full_name","name"]
+        ) ||
+        "Student";
+
+
+    /* HERO */
+
+    setText(
+        "profileName",
+        name
+    );
+
+
+    setText(
+        "profileEmail",
+        currentUser.email
+    );
+
+
+    /* AVATAR */
+
+    const avatarUrl =
+        localStorage.getItem(
+            "dreamHuntProfilePhoto_" +
+            currentUser.id
+        );
+
+
+    const avatar =
+        document.getElementById(
+            "bigAvatar"
+        );
+
+
+    if(avatarUrl){
+
+        avatar.innerHTML =
+            `<img src="${avatarUrl}" alt="Profile">`;
+
+    }else{
+
+        avatar.textContent =
+            name
+                .trim()
+                .charAt(0)
+                .toUpperCase() || "S";
+
+    }
+
+
+    /* BASIC */
+
+    const phone =
+        getValue(
+            "phone",
+            ["phone"],
+            ["phone"]
+        );
+
+    const dob =
+        getValue(
+            "dob",
+            ["date_of_birth"],
+            ["date_of_birth","dob"]
+        );
+
+    const gender =
+        getValue(
+            "gender",
+            ["gender"],
+            ["gender"]
+        );
+
+    const bloodGroup =
+        getValue(
+            "blood",
+            ["blood_group"],
+            ["blood_group","bloodGroup"]
+        );
+
+
+    setText("fullNameView",name);
+    setText("emailView",currentUser.email);
+    setText("phoneView",phone);
+    setText("dobView",dob);
+    setText("genderView",gender);
+    setText("bloodGroupView",bloodGroup);
+
+
+    /* FAMILY */
+
+    const fatherName =
+        getValue(
+            "father",
+            ["father_name"],
+            ["father_name","fatherName"]
+        );
+
+    const fatherPhone =
+        getValue(
+            "fatherPhone",
+            ["father_phone"],
+            ["father_phone","fatherPhone"]
+        );
+
+    const motherName =
+        getValue(
+            "mother",
+            ["mother_name"],
+            ["mother_name","motherName"]
+        );
+
+    const motherPhone =
+        getValue(
+            "motherPhone",
+            ["mother_phone"],
+            ["mother_phone","motherPhone"]
+        );
+
+    const guardianName =
+        getValue(
+            "guardian",
+            ["guardian_name"],
+            ["guardian_name","guardianName"]
+        );
+
+    const guardianPhone =
+        getValue(
+            "guardianPhone",
+            ["guardian_phone"],
+            ["guardian_phone","guardianPhone"]
+        );
+
+
+    setText("fatherNameView",fatherName);
+    setText("fatherPhoneView",fatherPhone);
+    setText("motherNameView",motherName);
+    setText("motherPhoneView",motherPhone);
+    setText("guardianNameView",guardianName);
+    setText("guardianPhoneView",guardianPhone);
+
+
+    /* ACADEMIC */
+
+    const institution =
+        getValue(
+            "institution",
+            ["institution_name"],
+            ["institution_name","college_name","institution"]
+        );
+
+    const board =
+        getValue(
+            "board",
+            ["board"],
+            ["board"]
+        );
+
+    const group =
+        getValue(
+            "group",
+            ["group_name"],
+            ["group_name","group"]
+        );
+
+    const hscYear =
+        getValue(
+            "hscYear",
+            ["hsc_year"],
+            ["hsc_year"]
+        );
+
+    const hscRoll =
+        getValue(
+            "hscRoll",
+            ["hsc_roll"],
+            ["hsc_roll","hscRoll"]
+        );
+
+    const hscReg =
+        getValue(
+            "hscReg",
+            ["hsc_registration"],
+            ["hsc_registration","hscReg"]
+        );
+
+    const sscInstitution =
+        getValue(
+            "sscInstitution",
+            ["ssc_institution"],
+            ["ssc_institution","sscInstitution"]
+        );
+
+    const sscBoard =
+        getValue(
+            "sscBoard",
+            ["ssc_board"],
+            ["ssc_board","sscBoard"]
+        );
+
+    const sscYear =
+        getValue(
+            "sscYear",
+            ["ssc_year"],
+            ["ssc_year"]
+        );
+
+    const sscGpa =
+        getValue(
+            "sscGpa",
+            ["ssc_gpa"],
+            ["ssc_gpa","sscGpa"]
+        );
+
+
+    setText("institutionView",institution);
+    setText("boardView",board);
+    setText("groupView",group);
+    setText("hscYearView",hscYear);
+    setText("hscRollView",hscRoll);
+    setText("hscRegView",hscReg);
+    setText("sscInstitutionView",sscInstitution);
+    setText("sscBoardView",sscBoard);
+    setText("sscYearView",sscYear);
+    setText("sscGpaView",sscGpa);
+
+
+    /* LOCATION */
+
+    const division =
+        getValue(
+            "division",
+            ["division"],
+            ["division"]
+        );
+
+    const district =
+        getValue(
+            "district",
+            ["district"],
+            ["district"]
+        );
+
+    const upazila =
+        getValue(
+            "upazila",
+            ["upazila"],
+            ["upazila","thana"]
+        );
+
+    const address =
+        getValue(
+            "address",
+            ["address"],
+            ["address","full_address"]
+        );
+
+
+    setText("divisionView",division);
+    setText("districtView",district);
+    setText("upazilaView",upazila);
+    setText("addressView",address);
+
+
+    /* ADMISSION */
+
+    const targetAdmission =
+        getValue(
+            "targetAdmission",
+            ["target_admission"],
+            ["target_admission","targetAdmission"]
+        );
+
+    const targetUniversity =
+        getValue(
+            "targetUniversity",
+            ["target_university"],
+            ["target_university","targetUniversity"]
+        );
+
+    const dreamSubject =
+        getValue(
+            "dreamSubject",
+            ["dream_subject"],
+            ["dream_subject","dreamSubject"]
+        );
+
+    const careerGoal =
+        getValue(
+            "careerGoal",
+            ["career_goal"],
+            ["career_goal","careerGoal"]
+        );
+
+
+    setText(
+        "targetAdmissionView",
+        targetAdmission
+    );
+
+    setText(
+        "targetUniversityView",
+        targetUniversity
+    );
+
+    setText(
+        "dreamSubjectView",
+        dreamSubject
+    );
+
+    setText(
+        "careerGoalView",
+        careerGoal
+    );
+
+
+    /* PERSONAL */
+
+    const nickname =
+        getValue(
+            "nickname",
+            ["nickname"],
+            ["nickname"]
+        );
+
+    const language =
+        getValue(
+            "language",
+            ["preferred_language"],
+            ["preferred_language","language"]
+        );
+
+    const about =
+        getValue(
+            "about",
+            ["about"],
+            ["about","bio"]
+        );
+
+
+    setText("nicknameView",nickname);
+    setText("languageView",language);
+    setText("aboutView",about);
+
+
+    /* ACCOUNT */
+
+    setText(
+        "accountEmail",
+        currentUser.email
+    );
+
+
+    setText(
+        "accountId",
+        currentUser.id
+    );
+
+
+    if(currentUser.created_at){
+
+        const date =
+            new Date(
+                currentUser.created_at
+            );
+
+        setText(
+            "createdAt",
+            date.toLocaleDateString(
+                "en-GB",
+                {
+                    day:"2-digit",
+                    month:"long",
+                    year:"numeric"
+                }
+            )
+        );
+
+    }
+
+
+    if(currentUser.email_confirmed_at){
+
+        setText(
+            "verification",
+            "✓ Email Verified"
+        );
+
+    }else{
+
+        setText(
+            "verification",
+            "Not Verified"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   EDIT MODE
+========================================================= */
+
+function enableEdit(){
+
+    document.body.classList.add(
+        "editing"
+    );
+
+
+    const name =
+        getValue(
+            "",
+            ["full_name"],
+            ["full_name","name"]
+        );
+
+    const phone =
+        getValue(
+            "",
+            ["phone"],
+            ["phone"]
+        );
+
+    const dob =
+        getValue(
+            "",
+            ["date_of_birth"],
+            ["date_of_birth","dob"]
+        );
+
+    const gender =
+        getValue(
+            "",
+            ["gender"],
+            ["gender"]
+        );
+
+    const blood =
+        getValue(
+            "",
+            ["blood_group"],
+            ["blood_group","bloodGroup"]
+        );
+
+
+    setInput(
+        "fullNameInput",
+        name
+    );
+
+    setInput(
+        "phoneInput",
+        phone
+    );
+
+    setInput(
+        "dobInput",
+        dob
+    );
+
+    setInput(
+        "genderInput",
+        gender
+    );
+
+    setInput(
+        "bloodGroupInput",
+        blood
+    );
+
+
+    /* FAMILY */
+
+    setInput(
+        "fatherNameInput",
+        getValue(
+            "",
+            ["father_name"],
+            ["father_name","fatherName"]
+        )
+    );
+
+    setInput(
+        "fatherPhoneInput",
+        getValue(
+            "",
+            ["father_phone"],
+            ["father_phone","fatherPhone"]
+        )
+    );
+
+    setInput(
+        "motherNameInput",
+        getValue(
+            "",
+            ["mother_name"],
+            ["mother_name","motherName"]
+        )
+    );
+
+    setInput(
+        "motherPhoneInput",
+        getValue(
+            "",
+            ["mother_phone"],
+            ["mother_phone","motherPhone"]
+        )
+    );
+
+    setInput(
+        "guardianNameInput",
+        getValue(
+            "",
+            ["guardian_name"],
+            ["guardian_name","guardianName"]
+        )
+    );
+
+    setInput(
+        "guardianPhoneInput",
+        getValue(
+            "",
+            ["guardian_phone"],
+            ["guardian_phone","guardianPhone"]
+        )
+    );
+
+
+    /* ACADEMIC */
+
+    setInput(
+        "institutionInput",
+        getValue(
+            "",
+            ["institution_name"],
+            ["institution_name","college_name","institution"]
+        )
+    );
+
+    setInput(
+        "boardInput",
+        getValue(
+            "",
+            ["board"],
+            ["board"]
+        )
+    );
+
+    setInput(
+        "groupInput",
+        getValue(
+            "",
+            ["group_name"],
+            ["group_name","group"]
+        )
+    );
+
+    setInput(
+        "hscYearInput",
+        getValue(
+            "",
+            ["hsc_year"],
+            ["hsc_year"]
+        )
+    );
+
+    setInput(
+        "hscRollInput",
+        getValue(
+            "",
+            ["hsc_roll"],
+            ["hsc_roll","hscRoll"]
+        )
+    );
+
+    setInput(
+        "hscRegInput",
+        getValue(
+            "",
+            ["hsc_registration"],
+            ["hsc_registration","hscReg"]
+        )
+    );
+
+    setInput(
+        "sscInstitutionInput",
+        getValue(
+            "",
+            ["ssc_institution"],
+            ["ssc_institution","sscInstitution"]
+        )
+    );
+
+    setInput(
+        "sscBoardInput",
+        getValue(
+            "",
+            ["ssc_board"],
+            ["ssc_board","sscBoard"]
+        )
+    );
+
+    setInput(
+        "sscYearInput",
+        getValue(
+            "",
+            ["ssc_year"],
+            ["ssc_year"]
+        )
+    );
+
+    setInput(
+        "sscGpaInput",
+        getValue(
+            "",
+            ["ssc_gpa"],
+            ["ssc_gpa","sscGpa"]
+        )
+    );
+
+
+    /* LOCATION */
+
+    setInput(
+        "divisionInput",
+        getValue(
+            "",
+            ["division"],
+            ["division"]
+        )
+    );
+
+    setInput(
+        "districtInput",
+        getValue(
+            "",
+            ["district"],
+            ["district"]
+        )
+    );
+
+    setInput(
+        "upazilaInput",
+        getValue(
+            "",
+            ["upazila"],
+            ["upazila","thana"]
+        )
+    );
+
+    setInput(
+        "addressInput",
+        getValue(
+            "",
+            ["address"],
+            ["address","full_address"]
+        )
+    );
+
+
+    /* ADMISSION */
+
+    setInput(
+        "targetAdmissionInput",
+        getValue(
+            "",
+            ["target_admission"],
+            ["target_admission","targetAdmission"]
+        )
+    );
+
+    setInput(
+        "targetUniversityInput",
+        getValue(
+            "",
+            ["target_university"],
+            ["target_university","targetUniversity"]
+        )
+    );
+
+    setInput(
+        "dreamSubjectInput",
+        getValue(
+            "",
+            ["dream_subject"],
+            ["dream_subject","dreamSubject"]
+        )
+    );
+
+    setInput(
+        "careerGoalInput",
+        getValue(
+            "",
+            ["career_goal"],
+            ["career_goal","careerGoal"]
+        )
+    );
+
+
+    /* PERSONAL */
+
+    setInput(
+        "nicknameInput",
+        getValue(
+            "",
+            ["nickname"],
+            ["nickname"]
+        )
+    );
+
+    setInput(
+        "languageInput",
+        getValue(
+            "",
+            ["preferred_language"],
+            ["preferred_language","language"]
+        )
+    );
+
+    setInput(
+        "aboutInput",
+        getValue(
+            "",
+            ["about"],
+            ["about","bio"]
+        )
+    );
+
+}
+
+
+/* =========================================================
+   CANCEL EDIT
+========================================================= */
+
+function cancelEdit(){
+
+    document.body.classList.remove(
+        "editing"
+    );
+
+    renderProfile();
+
+}
+
+
+/* =========================================================
+   SAVE PROFILE
+========================================================= */
+
+async function saveProfile(){
+
+    if(!currentUser){
+
+        return;
+
+    }
+
+
+    const saveButton =
+        document.getElementById(
+            "saveButton"
+        );
+
+
+    saveButton.disabled =
+        true;
+
+    saveButton.textContent =
+        "Saving...";
+
+
+    try{
+
+        const metadata = {
+
+            ...currentMetadata,
+
+            full_name:
+                document.getElementById(
+                    "fullNameInput"
+                ).value.trim(),
+
+            phone:
+                document.getElementById(
+                    "phoneInput"
+                ).value.trim(),
+
+            date_of_birth:
+                document.getElementById(
+                    "dobInput"
+                ).value,
+
+            gender:
+                document.getElementById(
+                    "genderInput"
+                ).value,
+
+            blood_group:
+                document.getElementById(
+                    "bloodGroupInput"
+                ).value,
+
+
+            father_name:
+                document.getElementById(
+                    "fatherNameInput"
+                ).value.trim(),
+
+            father_phone:
+                document.getElementById(
+                    "fatherPhoneInput"
+                ).value.trim(),
+
+            mother_name:
+                document.getElementById(
+                    "motherNameInput"
+                ).value.trim(),
+
+            mother_phone:
+                document.getElementById(
+                    "motherPhoneInput"
+                ).value.trim(),
+
+            guardian_name:
+                document.getElementById(
+                    "guardianNameInput"
+                ).value.trim(),
+
+            guardian_phone:
+                document.getElementById(
+                    "guardianPhoneInput"
+                ).value.trim(),
+
+
+            institution_name:
+                document.getElementById(
+                    "institutionInput"
+                ).value.trim(),
+
+            board:
+                document.getElementById(
+                    "boardInput"
+                ).value,
+
+            group_name:
+                document.getElementById(
+                    "groupInput"
+                ).value,
+
+            hsc_year:
+                document.getElementById(
+                    "hscYearInput"
+                ).value.trim(),
+
+            hsc_roll:
+                document.getElementById(
+                    "hscRollInput"
+                ).value.trim(),
+
+            hsc_registration:
+                document.getElementById(
+                    "hscRegInput"
+                ).value.trim(),
+
+            ssc_institution:
+                document.getElementById(
+                    "sscInstitutionInput"
+                ).value.trim(),
+
+            ssc_board:
+                document.getElementById(
+                    "sscBoardInput"
+                ).value,
+
+            ssc_year:
+                document.getElementById(
+                    "sscYearInput"
+                ).value.trim(),
+
+            ssc_gpa:
+                document.getElementById(
+                    "sscGpaInput"
+                ).value.trim(),
+
+
+            division:
+                document.getElementById(
+                    "divisionInput"
+                ).value,
+
+            district:
+                document.getElementById(
+                    "districtInput"
+                ).value.trim(),
+
+            upazila:
+                document.getElementById(
+                    "upazilaInput"
+                ).value.trim(),
+
+            address:
+                document.getElementById(
+                    "addressInput"
+                ).value.trim(),
+
+
+            target_admission:
+                document.getElementById(
+                    "targetAdmissionInput"
+                ).value,
+
+            target_university:
+                document.getElementById(
+                    "targetUniversityInput"
+                ).value.trim(),
+
+            dream_subject:
+                document.getElementById(
+                    "dreamSubjectInput"
+                ).value.trim(),
+
+            career_goal:
+                document.getElementById(
+                    "careerGoalInput"
+                ).value.trim(),
+
+
+            nickname:
+                document.getElementById(
+                    "nicknameInput"
+                ).value.trim(),
+
+            preferred_language:
+                document.getElementById(
+                    "languageInput"
+                ).value,
+
+            about:
+                document.getElementById(
+                    "aboutInput"
+                ).value.trim()
+
+        };
+
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient.auth.updateUser({
+                data:metadata
+            });
+
+
+        if(error){
+
+            throw error;
+
+        }
+
+
+        currentUser =
+            data.user;
+
+        currentMetadata =
+            data.user.user_metadata || {};
+
+
+        document.body.classList.remove(
+            "editing"
+        );
+
+
+        renderProfile();
+
+
+        showMessage(
+            "✓ Profile updated successfully."
+        );
+
+
+    }catch(error){
+
+        console.error(error);
+
+        showMessage(
+            "Could not update profile: " +
+            error.message,
+            true
+        );
+
+    }finally{
+
+        saveButton.disabled =
+            false;
+
+        saveButton.textContent =
+            "💾 Save Changes";
+
+    }
+
+}
+
+
+/* =========================================================
+   PROFILE PHOTO
+========================================================= */
+
+function openPhotoPicker(){
+
+    document.getElementById(
+        "photoInput"
+    ).click();
+
+}
+
+
+function handlePhoto(event){
+
+    const file =
+        event.target.files[0];
+
+
+    if(!file){
+
+        return;
+
+    }
+
+
+    if(!file.type.startsWith("image/")){
+
+        showMessage(
+            "Please select an image file.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    if(file.size > 3 * 1024 * 1024){
+
+        showMessage(
+            "Image must be smaller than 3MB.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    const reader =
+        new FileReader();
+
+
+    reader.onload =
+        function(e){
+
+            const image =
+                new Image();
+
+
+            image.onload =
+                function(){
+
+                    const canvas =
+                        document.createElement(
+                            "canvas"
+                        );
+
+
+                    const max =
+                        500;
+
+
+                    let width =
+                        image.width;
+
+                    let height =
+                        image.height;
+
+
+                    if(width > height){
+
+                        if(width > max){
+
+                            height =
+                                height *
+                                max /
+                                width;
+
+                            width =
+                                max;
+
+                        }
+
+                    }else{
+
+                        if(height > max){
+
+                            width =
+                                width *
+                                max /
+                                height;
+
+                            height =
+                                max;
+
+                        }
+
+                    }
+
+
+                    canvas.width =
+                        width;
+
+                    canvas.height =
+                        height;
+
+
+                    const ctx =
+                        canvas.getContext(
+                            "2d"
+                        );
+
+
+                    ctx.drawImage(
+                        image,
+                        0,
+                        0,
+                        width,
+                        height
+                    );
+
+
+                    const compressed =
+                        canvas.toDataURL(
+                            "image/jpeg",
+                            .82
+                        );
+
+
+                    localStorage.setItem(
+                        "dreamHuntProfilePhoto_" +
+                        currentUser.id,
+                        compressed
+                    );
+
+
+                    renderProfile();
+
+
+                    showMessage(
+                        "✓ Profile picture updated on this device."
+                    );
+
+                };
+
+
+            image.src =
+                e.target.result;
+
+        };
+
+
+    reader.readAsDataURL(file);
+
+}
+
+
+function removePhoto(){
+
+    if(!currentUser){
+
+        return;
+
+    }
+
+
+    localStorage.removeItem(
+        "dreamHuntProfilePhoto_" +
+        currentUser.id
+    );
+
+
+    renderProfile();
+
+
+    showMessage(
+        "Profile picture removed."
+    );
+
+}
+
+
+/* =========================================================
+   AUTH STATE
+========================================================= */
+
+supabaseClient.auth.onAuthStateChange(
+    function(event,session){
+
+        if(
+            event === "SIGNED_OUT" ||
+            !session
+        ){
+
+            window.location.href =
+                "index.html";
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   START
+========================================================= */
+
+loadProfile();
+
+</script>
+
+</body>
+    </html>

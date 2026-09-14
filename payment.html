@@ -1,0 +1,2398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dream Hunt | Payment</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Inter,Arial,sans-serif;
+    background:
+        radial-gradient(circle at top left,#172554 0%,transparent 35%),
+        radial-gradient(circle at bottom right,#312e81 0%,transparent 35%),
+        #050816;
+    color:#fff;
+    min-height:100vh;
+}
+
+.navbar{
+    height:70px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 7%;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    background:rgba(5,8,22,.75);
+    backdrop-filter:blur(18px);
+    position:sticky;
+    top:0;
+    z-index:20;
+}
+
+.logo{
+    font-size:23px;
+    font-weight:900;
+    letter-spacing:.5px;
+}
+
+.logo span{
+    color:#8b5cf6;
+}
+
+.nav-btn{
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.06);
+    color:white;
+    padding:10px 17px;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:700;
+}
+
+.container{
+    width:min(1100px,92%);
+    margin:40px auto 70px;
+}
+
+.hero{
+    margin-bottom:25px;
+}
+
+.hero h1{
+    font-size:clamp(30px,6vw,48px);
+    line-height:1.05;
+    font-weight:950;
+}
+
+.hero h1 span{
+    color:#a78bfa;
+}
+
+.hero p{
+    margin-top:10px;
+    color:#9ca3af;
+    line-height:1.6;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:1.15fr .85fr;
+    gap:22px;
+}
+
+.card{
+    background:rgba(15,23,42,.72);
+    border:1px solid rgba(255,255,255,.09);
+    border-radius:22px;
+    padding:24px;
+    box-shadow:0 20px 70px rgba(0,0,0,.25);
+    backdrop-filter:blur(18px);
+}
+
+.card h2{
+    font-size:20px;
+    margin-bottom:18px;
+}
+
+.section{
+    margin-bottom:25px;
+}
+
+.package{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+    padding:16px;
+    border-radius:16px;
+    background:rgba(255,255,255,.045);
+    border:1px solid rgba(255,255,255,.07);
+    margin-bottom:10px;
+}
+
+.package-title{
+    font-weight:800;
+}
+
+.package-sub{
+    color:#94a3b8;
+    font-size:13px;
+    margin-top:5px;
+}
+
+.price{
+    font-weight:900;
+    white-space:nowrap;
+}
+
+.summary-row{
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+    padding:11px 0;
+    color:#cbd5e1;
+}
+
+.summary-row.total{
+    margin-top:12px;
+    padding-top:18px;
+    border-top:1px solid rgba(255,255,255,.1);
+    color:white;
+    font-size:22px;
+    font-weight:950;
+}
+
+.discount{
+    color:#4ade80;
+}
+
+.payment-methods{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.method{
+    padding:14px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.1);
+    background:rgba(255,255,255,.035);
+    cursor:pointer;
+    transition:.2s;
+}
+
+.method:hover{
+    transform:translateY(-2px);
+}
+
+.method.active{
+    border-color:#8b5cf6;
+    background:rgba(139,92,246,.15);
+}
+
+.method strong{
+    display:block;
+}
+
+.method small{
+    color:#94a3b8;
+}
+
+label{
+    display:block;
+    margin:14px 0 7px;
+    font-size:13px;
+    font-weight:700;
+    color:#cbd5e1;
+}
+
+input{
+    width:100%;
+    padding:14px 15px;
+    border-radius:13px;
+    border:1px solid rgba(255,255,255,.1);
+    outline:none;
+    background:#0b1120;
+    color:white;
+    font-size:14px;
+}
+
+input:focus{
+    border-color:#8b5cf6;
+    box-shadow:0 0 0 3px rgba(139,92,246,.1);
+}
+
+.pay-number{
+    margin:15px 0;
+    padding:15px;
+    border-radius:14px;
+    background:rgba(139,92,246,.1);
+    border:1px solid rgba(139,92,246,.25);
+}
+
+.pay-number small{
+    display:block;
+    color:#a5b4fc;
+    margin-bottom:5px;
+}
+
+.pay-number strong{
+    font-size:20px;
+    letter-spacing:1px;
+}
+
+.submit{
+    width:100%;
+    margin-top:20px;
+    padding:16px;
+    border:0;
+    border-radius:15px;
+    background:linear-gradient(135deg,#7c3aed,#4f46e5);
+    color:white;
+    font-size:16px;
+    font-weight:900;
+    cursor:pointer;
+    box-shadow:0 10px 30px rgba(79,70,229,.25);
+}
+
+.submit:hover{
+    transform:translateY(-1px);
+}
+
+.submit:disabled{
+    opacity:.55;
+    cursor:not-allowed;
+}
+
+.notice{
+    padding:14px;
+    border-radius:13px;
+    background:rgba(245,158,11,.08);
+    border:1px solid rgba(245,158,11,.25);
+    color:#fcd34d;
+    font-size:13px;
+    line-height:1.6;
+    margin-bottom:15px;
+}
+
+.error{
+    padding:14px;
+    border-radius:13px;
+    background:rgba(239,68,68,.08);
+    border:1px solid rgba(239,68,68,.3);
+    color:#fca5a5;
+    font-size:13px;
+    line-height:1.6;
+    margin-bottom:15px;
+}
+
+.success{
+    text-align:center;
+    padding:35px 20px;
+}
+
+.success-icon{
+    width:74px;
+    height:74px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:0 auto 18px;
+    border-radius:50%;
+    background:rgba(34,197,94,.12);
+    border:1px solid rgba(34,197,94,.35);
+    color:#4ade80;
+    font-size:36px;
+}
+
+.success h2{
+    color:#4ade80;
+    margin-bottom:10px;
+    font-size:25px;
+}
+
+.status{
+    display:inline-block;
+    margin:18px 0;
+    padding:9px 15px;
+    border-radius:999px;
+    background:rgba(245,158,11,.12);
+    border:1px solid rgba(245,158,11,.25);
+    color:#fbbf24;
+    font-size:11px;
+    font-weight:900;
+    letter-spacing:1px;
+}
+
+.details{
+    text-align:left;
+    background:rgba(255,255,255,.04);
+    border-radius:15px;
+    padding:16px;
+    margin-top:15px;
+}
+
+.detail{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+    padding:10px 0;
+    font-size:13px;
+}
+
+.detail span:first-child{
+    color:#94a3b8;
+}
+
+.detail span:last-child{
+    font-weight:700;
+    text-align:right;
+    word-break:break-word;
+}
+
+.pending-box{
+    margin-top:20px;
+    padding:17px;
+    border-radius:15px;
+    background:rgba(245,158,11,.08);
+    border:1px solid rgba(245,158,11,.22);
+    color:#fcd34d;
+    font-size:13px;
+    line-height:1.8;
+    text-align:left;
+}
+
+.pending-box strong{
+    font-size:15px;
+}
+
+.back{
+    margin-top:18px;
+    width:100%;
+    padding:14px;
+    border-radius:13px;
+    border:1px solid rgba(255,255,255,.1);
+    background:rgba(255,255,255,.04);
+    color:white;
+    font-weight:800;
+    cursor:pointer;
+}
+
+.empty{
+    color:#94a3b8;
+    line-height:1.7;
+    padding:20px 0;
+}
+
+@media(max-width:800px){
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .navbar{
+        padding:0 4%;
+    }
+
+    .container{
+        width:94%;
+        margin-top:25px;
+    }
+
+    .card{
+        padding:18px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+        Dream <span>Hunt</span>
+    </div>
+
+    <button class="nav-btn" onclick="goBack()">
+        ← Back
+    </button>
+
+</nav>
+
+
+<main class="container">
+
+    <div class="hero">
+
+        <h1>
+            Complete Your <span>Payment</span>
+        </h1>
+
+        <p>
+            Review your selected package and submit your payment information.
+        </p>
+
+    </div>
+
+
+    <div id="message"></div>
+
+
+    <div id="paymentArea" class="grid">
+
+        <div class="card">
+
+            <div class="section">
+
+                <h2>
+                    Selected Package
+                </h2>
+
+                <div id="selectedPackage">
+
+                    <div class="empty">
+                        Loading your selected package...
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Payment
+            </h2>
+
+
+            <div class="section">
+
+                <div class="payment-methods">
+
+                    <div
+                        class="method active"
+                        data-method="bKash"
+                        onclick="selectMethod(this)"
+                    >
+
+                        <strong>
+                            bKash
+                        </strong>
+
+                        <small>
+                            Personal payment
+                        </small>
+
+                    </div>
+
+
+                    <div
+                        class="method"
+                        data-method="Nagad"
+                        onclick="selectMethod(this)"
+                    >
+
+                        <strong>
+                            Nagad
+                        </strong>
+
+                        <small>
+                            Personal payment
+                        </small>
+
+                    </div>
+
+
+                    <div
+                        class="method"
+                        data-method="Rocket"
+                        onclick="selectMethod(this)"
+                    >
+
+                        <strong>
+                            Rocket
+                        </strong>
+
+                        <small>
+                            Personal payment
+                        </small>
+
+                    </div>
+
+
+                    <div
+                        class="method"
+                        data-method="Upay"
+                        onclick="selectMethod(this)"
+                    >
+
+                        <strong>
+                            Upay
+                        </strong>
+
+                        <small>
+                            Personal payment
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="pay-number">
+
+                    <small>
+                        Send payment to
+                    </small>
+
+                    <strong>
+                        01342-210515
+                    </strong>
+
+                </div>
+
+
+                <label>
+                    Transaction ID
+                </label>
+
+                <input
+                    id="transactionId"
+                    type="text"
+                    placeholder="Enter transaction ID"
+                    autocomplete="off"
+                >
+
+
+                <label>
+                    HSC Roll
+                </label>
+
+                <input
+                    id="hscRoll"
+                    type="text"
+                    placeholder="Enter HSC roll"
+                    autocomplete="off"
+                >
+
+
+                <label>
+                    HSC Registration
+                </label>
+
+                <input
+                    id="hscRegistration"
+                    type="text"
+                    placeholder="Enter HSC registration"
+                    autocomplete="off"
+                >
+
+
+                <button
+                    id="submitBtn"
+                    class="submit"
+                    onclick="submitPayment()"
+                >
+                    Submit Payment
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+/* =========================================================
+   SUPABASE
+========================================================= */
+
+const SUPABASE_URL =
+    "https://rndtgjuwwsxxiiezennr.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_mIQfKUUsEOlDtqEdroMpgQ_I8ElRcsN";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =========================================================
+   GLOBALS
+========================================================= */
+
+let checkout = null;
+
+let selectedMethod = "bKash";
+
+
+/* =========================================================
+   LOAD CHECKOUT
+========================================================= */
+
+function loadCheckout(){
+
+    const sessionPrimary =
+        sessionStorage.getItem(
+            "dreamHuntCheckout"
+        );
+
+    const sessionSecondary =
+        sessionStorage.getItem(
+            "dream_hunt_course_order"
+        );
+
+    const localBackup =
+        localStorage.getItem(
+            "dreamHuntCheckoutBackup"
+        );
+
+    const raw =
+        sessionPrimary ||
+        sessionSecondary ||
+        localBackup;
+
+    if(!raw){
+
+        showError(
+            "No checkout information was found. Please return to Buy Courses and select your package again."
+        );
+
+        document.getElementById(
+            "paymentArea"
+        ).style.display = "none";
+
+        return false;
+    }
+
+
+    try{
+
+        checkout =
+            JSON.parse(raw);
+
+    }catch(error){
+
+        console.error(
+            "Checkout JSON error:",
+            error
+        );
+
+        showError(
+            "Your checkout information is invalid. Please select your package again."
+        );
+
+        document.getElementById(
+            "paymentArea"
+        ).style.display = "none";
+
+        return false;
+    }
+
+
+    console.log(
+        "Checkout loaded:",
+        checkout
+    );
+
+    renderCheckout();
+
+    return true;
+}
+
+
+/* =========================================================
+   RENDER CHECKOUT
+========================================================= */
+
+function renderCheckout(){
+
+    const box =
+        document.getElementById(
+            "selectedPackage"
+        );
+
+    const selected =
+        Array.isArray(checkout.selectedItems)
+            ? checkout.selectedItems
+            : (
+                Array.isArray(checkout.selected)
+                    ? checkout.selected
+                    : []
+            );
+
+    let html = "";
+
+
+    if(selected.length){
+
+        selected.forEach(item => {
+
+            let title =
+                item.name ||
+                item.title ||
+                item.label ||
+                item.category ||
+                "Selected Course";
+
+            let subtitle =
+                item.subtitle ||
+                item.unit ||
+                item.description ||
+                "";
+
+
+            html += `
+
+                <div class="package">
+
+                    <div>
+
+                        <div class="package-title">
+                            ${escapeHTML(title)}
+                        </div>
+
+                        ${
+                            subtitle
+                            ? `
+                                <div class="package-sub">
+                                    ${escapeHTML(subtitle)}
+                                </div>
+                            `
+                            : ""
+                        }
+
+                    </div>
+
+                </div>
+
+            `;
+
+        });
+
+    }else{
+
+        const categories =
+            Array.isArray(checkout.categories)
+                ? checkout.categories
+                : [];
+
+        categories.forEach(category => {
+
+            html += `
+
+                <div class="package">
+
+                    <div class="package-title">
+                        ${escapeHTML(category)}
+                    </div>
+
+                </div>
+
+            `;
+
+        });
+
+    }
+
+
+    const subtotal =
+        Number(
+            checkout.subtotal || 0
+        );
+
+    const discount =
+        Number(
+            checkout.discount || 0
+        );
+
+    const total =
+        Number(
+            checkout.finalAmount ??
+            checkout.payableAmount ??
+            checkout.totalAmount ??
+            checkout.amount ??
+            checkout.total ??
+            0
+        );
+
+
+    html += `
+
+        <div style="margin-top:20px">
+
+            <div class="summary-row">
+
+                <span>
+                    Subtotal
+                </span>
+
+                <strong>
+                    ৳${formatMoney(subtotal)}
+                </strong>
+
+            </div>
+
+
+            ${
+                discount > 0
+                ? `
+                    <div class="summary-row">
+
+                        <span>
+                            Coupon Discount
+                        </span>
+
+                        <strong class="discount">
+                            -৳${formatMoney(discount)}
+                        </strong>
+
+                    </div>
+                `
+                : ""
+            }
+
+
+            <div class="summary-row total">
+
+                <span>
+                    Total
+                </span>
+
+                <strong>
+                    ৳${formatMoney(total)}
+                </strong>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    box.innerHTML = html;
+}
+
+
+/* =========================================================
+   PAYMENT METHOD
+========================================================= */
+
+function selectMethod(element){
+
+    document
+        .querySelectorAll(".method")
+        .forEach(el => {
+
+            el.classList.remove(
+                "active"
+            );
+
+        });
+
+
+    element.classList.add(
+        "active"
+    );
+
+
+    selectedMethod =
+        element.dataset.method;
+}
+
+
+/* =========================================================
+   CATEGORY → COURSE NAME
+========================================================= */
+
+const COURSE_NAME_MAP = {
+
+    engineering:
+        "Engineering Admission",
+
+    medical:
+        "Medical & Dental Admission",
+
+    dental:
+        "Medical & Dental Admission",
+
+    "medical-dental":
+        "Medical & Dental Admission",
+
+    agricultural:
+        "Agriculture & Veterinary Admission",
+
+    agriculture:
+        "Agriculture & Veterinary Admission",
+
+    "agriculture-veterinary":
+        "Agriculture & Veterinary Admission",
+
+    textile:
+        "Specialized Admission",
+
+    specialized:
+        "Specialized Admission",
+
+    "specialized-admission":
+        "Specialized Admission",
+
+    "public-university":
+        "Public University Admission",
+
+    public:
+        "Public University Admission",
+
+    "public university":
+        "Public University Admission",
+
+    "public-university-admission":
+        "Public University Admission",
+
+    ab:
+        "Abroad Preparation",
+
+    abroad:
+        "Abroad Preparation",
+
+    "abroad-preparation":
+        "Abroad Preparation",
+
+    "abroad prep":
+        "Abroad Preparation",
+
+    sat:
+        "Abroad Preparation",
+
+    ielts:
+        "Abroad Preparation"
+
+};
+
+
+/* =========================================================
+   NORMALIZE
+========================================================= */
+
+function normalize(value){
+
+    return String(
+        value || ""
+    )
+    .trim()
+    .toLowerCase()
+    .replace(
+        /&/g,
+        "and"
+    )
+    .replace(
+        /[^a-z0-9]+/g,
+        " "
+    )
+    .trim();
+}
+
+
+/* =========================================================
+   GET CHECKOUT CATEGORIES
+========================================================= */
+
+function getCheckoutCategories(){
+
+    let categories = [];
+
+
+    if(
+        checkout &&
+        Array.isArray(
+            checkout.categories
+        )
+    ){
+
+        categories =
+            checkout.categories;
+
+    }
+
+
+    if(
+        !categories.length &&
+        checkout &&
+        Array.isArray(
+            checkout.orderCategories
+        )
+    ){
+
+        categories =
+            checkout.orderCategories;
+
+    }
+
+
+    if(
+        !categories.length &&
+        checkout &&
+        Array.isArray(
+            checkout.courseSlugs
+        )
+    ){
+
+        categories =
+            checkout.courseSlugs;
+
+    }
+
+
+    return [
+
+        ...new Set(
+
+            categories
+                .map(
+                    x => normalize(x)
+                )
+                .filter(Boolean)
+
+        )
+
+    ];
+
+}
+
+
+/* =========================================================
+   FIND EXISTING COURSE IDS
+========================================================= */
+
+async function findCourseIds(){
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("courses")
+            .select(
+                "id,name,slug,category,is_active,is_published"
+            )
+            .eq(
+                "is_active",
+                true
+            )
+            .eq(
+                "is_published",
+                true
+            );
+
+
+    if(error){
+
+        console.error(
+            "Course query error:",
+            error
+        );
+
+        throw new Error(
+            "Could not read available courses from Supabase."
+        );
+
+    }
+
+
+    if(
+        !Array.isArray(data) ||
+        !data.length
+    ){
+
+        throw new Error(
+            "No active and published courses were found."
+        );
+
+    }
+
+
+    console.log(
+        "Courses returned:",
+        data
+    );
+
+
+    const categories =
+        getCheckoutCategories();
+
+
+    const requiredNames = [];
+
+
+    categories.forEach(
+        category => {
+
+            const mapped =
+                COURSE_NAME_MAP[
+                    category
+                ];
+
+
+            if(mapped){
+
+                requiredNames.push(
+                    normalize(mapped)
+                );
+
+            }
+
+        }
+    );
+
+
+    /*
+       Fallback:
+       Inspect selectedItems.
+    */
+
+    if(
+        !requiredNames.length &&
+        checkout &&
+        Array.isArray(
+            checkout.selectedItems
+        )
+    ){
+
+        checkout.selectedItems.forEach(
+            item => {
+
+                const text =
+                    normalize(
+                        item.name ||
+                        item.title ||
+                        item.category ||
+                        ""
+                    );
+
+
+                if(text){
+
+                    const mapped =
+                        COURSE_NAME_MAP[
+                            text
+                        ];
+
+
+                    if(mapped){
+
+                        requiredNames.push(
+                            normalize(mapped)
+                        );
+
+                    }else{
+
+                        requiredNames.push(
+                            text
+                        );
+
+                    }
+
+                }
+
+            }
+        );
+
+    }
+
+
+    const uniqueRequired =
+        [
+            ...new Set(
+                requiredNames
+            )
+        ];
+
+
+    const matched = [];
+
+
+    uniqueRequired.forEach(
+        required => {
+
+            let row =
+                data.find(
+                    course =>
+                        normalize(
+                            course.name
+                        ) === required
+                );
+
+
+            if(!row){
+
+                row =
+                    data.find(
+                        course =>
+                            normalize(
+                                course.slug
+                            ) === required
+                    );
+
+            }
+
+
+            if(!row){
+
+                row =
+                    data.find(
+                        course => {
+
+                            const name =
+                                normalize(
+                                    course.name
+                                );
+
+
+                            return (
+                                name.includes(
+                                    required
+                                ) ||
+                                required.includes(
+                                    name
+                                )
+                            );
+
+                        }
+                    );
+
+            }
+
+
+            if(row){
+
+                if(
+                    !matched.some(
+                        x =>
+                            x.id === row.id
+                    )
+                ){
+
+                    matched.push(
+                        row
+                    );
+
+                }
+
+            }
+
+        }
+    );
+
+
+    /*
+       Extra fallback:
+       directly match selectedItems.
+    */
+
+    if(
+        !matched.length &&
+        checkout &&
+        Array.isArray(
+            checkout.selectedItems
+        )
+    ){
+
+        checkout.selectedItems.forEach(
+            item => {
+
+                const text =
+                    normalize(
+                        item.name ||
+                        item.title ||
+                        item.category ||
+                        ""
+                    );
+
+
+                if(!text){
+                    return;
+                }
+
+
+                const row =
+                    data.find(
+                        course => {
+
+                            const name =
+                                normalize(
+                                    course.name
+                                );
+
+                            const slug =
+                                normalize(
+                                    course.slug
+                                );
+
+
+                            return (
+                                name.includes(text) ||
+                                text.includes(name) ||
+                                slug.includes(text) ||
+                                text.includes(slug)
+                            );
+
+                        }
+                    );
+
+
+                if(
+                    row &&
+                    !matched.some(
+                        x =>
+                            x.id === row.id
+                    )
+                ){
+
+                    matched.push(
+                        row
+                    );
+
+                }
+
+            }
+        );
+
+    }
+
+
+    if(!matched.length){
+
+        console.error(
+            "Checkout categories:",
+            categories
+        );
+
+        console.error(
+            "Required names:",
+            uniqueRequired
+        );
+
+        console.error(
+            "Available courses:",
+            data
+        );
+
+        throw new Error(
+            "Invalid or unavailable course. Please return to Buy Courses and select your package again."
+        );
+
+    }
+
+
+    return matched;
+}
+
+
+/* =========================================================
+   BUILD RPC PRICES
+========================================================= */
+
+function buildRPCPrices(courseRows){
+
+    const total =
+        Number(
+            checkout.finalAmount ??
+            checkout.payableAmount ??
+            checkout.totalAmount ??
+            checkout.amount ??
+            checkout.total ??
+            0
+        );
+
+
+    /*
+       Existing order pricing logic preserved.
+
+       The total amount is attached to the first
+       broad course row, while other rows remain 0.
+    */
+
+    return courseRows.map(
+        (_, index) =>
+            index === 0
+                ? total
+                : 0
+    );
+}
+
+
+/* =========================================================
+   BUILD SELECTED DATA
+========================================================= */
+
+function buildSelectedData(
+    transactionId,
+    hscRoll,
+    hscRegistration,
+    amount
+){
+
+    return {
+
+        source:
+            "dream-hunt-buy-courses",
+
+        selected:
+            checkout.selected || [],
+
+        selectedItems:
+            checkout.selectedItems || [],
+
+        categories:
+            checkout.categories || [],
+
+        orderCategories:
+            checkout.orderCategories || [],
+
+        courseSlugs:
+            checkout.courseSlugs || [],
+
+        courseIds:
+            checkout.courseIds || [],
+
+        courseNames:
+            checkout.courseNames || [],
+
+        selectedMainCategories:
+            checkout.selectedMainCategories || [],
+
+        selectedAbroad:
+            checkout.selectedAbroad || [],
+
+        subtotal:
+            Number(
+                checkout.subtotal || 0
+            ),
+
+        discount:
+            Number(
+                checkout.discount || 0
+            ),
+
+        coupon:
+            checkout.coupon ||
+            checkout.couponCode ||
+            "",
+
+        total:
+            Number(
+                checkout.total || 0
+            ),
+
+        amount:
+            amount,
+
+        payableAmount:
+            Number(
+                checkout.payableAmount || 0
+            ),
+
+        finalAmount:
+            Number(
+                checkout.finalAmount || 0
+            ),
+
+        payment: {
+
+            method:
+                selectedMethod,
+
+            transaction_id:
+                transactionId,
+
+            hsc_roll:
+                hscRoll,
+
+            hsc_registration:
+                hscRegistration,
+
+            submitted_at:
+                new Date().toISOString()
+
+        }
+
+    };
+}
+
+
+/* =========================================================
+   SUBMIT PAYMENT
+========================================================= */
+
+async function submitPayment(){
+
+    const submitBtn =
+        document.getElementById(
+            "submitBtn"
+        );
+
+
+    const transactionId =
+        document
+            .getElementById(
+                "transactionId"
+            )
+            .value
+            .trim();
+
+
+    const hscRoll =
+        document
+            .getElementById(
+                "hscRoll"
+            )
+            .value
+            .trim();
+
+
+    const hscRegistration =
+        document
+            .getElementById(
+                "hscRegistration"
+            )
+            .value
+            .trim();
+
+
+    if(!transactionId){
+
+        showError(
+            "Please enter your Transaction ID."
+        );
+
+        return;
+    }
+
+
+    if(!hscRoll){
+
+        showError(
+            "Please enter your HSC Roll."
+        );
+
+        return;
+    }
+
+
+    if(!hscRegistration){
+
+        showError(
+            "Please enter your HSC Registration."
+        );
+
+        return;
+    }
+
+
+    if(!checkout){
+
+        showError(
+            "No checkout information was found. Please return to Buy Courses."
+        );
+
+        return;
+    }
+
+
+    submitBtn.disabled = true;
+
+    submitBtn.innerText =
+        "Checking account...";
+
+
+    try{
+
+        /*
+           CHECK LOGIN
+        */
+
+        const {
+            data: userData,
+            error: userError
+        } =
+            await supabaseClient
+                .auth
+                .getUser();
+
+
+        if(
+            userError ||
+            !userData ||
+            !userData.user
+        ){
+
+            window.location.href =
+                "login.html?redirect=payment.html";
+
+            return;
+        }
+
+
+        submitBtn.innerText =
+            "Finding course...";
+
+
+        /*
+           FIND COURSE IDs
+        */
+
+        const courseRows =
+            await findCourseIds();
+
+
+        if(
+            !courseRows ||
+            !courseRows.length
+        ){
+
+            throw new Error(
+                "Invalid or unavailable course."
+            );
+
+        }
+
+
+        const courseIds =
+            courseRows.map(
+                row => row.id
+            );
+
+
+        const prices =
+            buildRPCPrices(
+                courseRows
+            );
+
+
+        const amount =
+            Number(
+                checkout.finalAmount ??
+                checkout.payableAmount ??
+                checkout.totalAmount ??
+                checkout.amount ??
+                checkout.total ??
+                0
+            );
+
+
+        /*
+           EXACT DATA TO SAVE
+        */
+
+        const selectedData =
+            buildSelectedData(
+                transactionId,
+                hscRoll,
+                hscRegistration,
+                amount
+            );
+
+
+        console.log(
+            "Matched courses:",
+            courseRows
+        );
+
+        console.log(
+            "RPC course IDs:",
+            courseIds
+        );
+
+        console.log(
+            "RPC prices:",
+            prices
+        );
+
+        console.log(
+            "Selected data:",
+            selectedData
+        );
+
+
+        submitBtn.innerText =
+            "Submitting order...";
+
+
+        /*
+           NEW RPC
+
+           create_student_order(
+               UUID[],
+               NUMERIC[],
+               TEXT,
+               TEXT,
+               TEXT,
+               JSONB
+           )
+        */
+
+        const {
+            data: orderData,
+            error: orderError
+        } =
+            await supabaseClient
+                .rpc(
+                    "create_student_order",
+                    {
+
+                        p_course_ids:
+                            courseIds,
+
+                        p_prices:
+                            prices,
+
+                        p_transaction_id:
+                            transactionId,
+
+                        p_payment_method:
+                            selectedMethod,
+
+                        p_coupon_code:
+                            checkout.coupon ||
+                            checkout.couponCode ||
+                            "",
+
+                        p_selected_data:
+                            selectedData
+
+                    }
+                );
+
+
+        if(orderError){
+
+            console.error(
+                "RPC error:",
+                orderError
+            );
+
+            throw new Error(
+                orderError.message ||
+                "Could not create your order."
+            );
+
+        }
+
+
+        /*
+           EXTRACT ORDER ID
+        */
+
+        let orderId =
+            extractOrderId(
+                orderData
+            );
+
+
+        if(!orderId){
+
+            orderId =
+                "DH-" +
+                Date.now();
+
+        }
+
+
+        /*
+           LOCAL BACKUP
+
+           Database is now the primary source.
+           LocalStorage is only a backup.
+        */
+
+        const paymentRecord = {
+
+            order_id:
+                orderId,
+
+            user_id:
+                userData.user.id,
+
+            payment_method:
+                selectedMethod,
+
+            transaction_id:
+                transactionId,
+
+            hsc_roll:
+                hscRoll,
+
+            hsc_registration:
+                hscRegistration,
+
+            amount:
+                amount,
+
+            coupon:
+                checkout.coupon ||
+                checkout.couponCode ||
+                "",
+
+            selected_courses:
+                checkout.selectedItems ||
+                checkout.selected ||
+                [],
+
+            selected_categories:
+                checkout.categories ||
+                [],
+
+            selected_data:
+                selectedData,
+
+            status:
+                "PENDING",
+
+            approval_status:
+                "WAITING_FOR_APPROVAL",
+
+            created_at:
+                new Date().toISOString()
+
+        };
+
+
+        localStorage.setItem(
+            "dreamHuntPayment_" +
+            orderId,
+
+            JSON.stringify(
+                paymentRecord
+            )
+        );
+
+
+        localStorage.setItem(
+            "dreamHuntLatestPayment",
+
+            JSON.stringify(
+                paymentRecord
+            )
+        );
+
+
+        /*
+           SHOW SUCCESS
+        */
+
+        showSuccess(
+            paymentRecord,
+            courseRows
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "Payment submit error:",
+            error
+        );
+
+
+        showError(
+            error.message ||
+            "Something went wrong while submitting your payment."
+        );
+
+
+        submitBtn.disabled = false;
+
+        submitBtn.innerText =
+            "Submit Payment";
+
+    }
+
+}
+
+
+/* =========================================================
+   EXTRACT ORDER ID
+========================================================= */
+
+function extractOrderId(data){
+
+    if(!data){
+
+        return null;
+    }
+
+
+    if(
+        typeof data === "number"
+    ){
+
+        return data;
+    }
+
+
+    if(
+        typeof data === "string"
+    ){
+
+        return data;
+    }
+
+
+    if(
+        typeof data === "object"
+    ){
+
+        return (
+
+            data.id ||
+
+            data.order_id ||
+
+            data.orderId ||
+
+            data[0]?.id ||
+
+            data[0]?.order_id ||
+
+            data[0]?.orderId ||
+
+            null
+
+        );
+
+    }
+
+
+    return null;
+}
+
+
+/* =========================================================
+   SUCCESS
+========================================================= */
+
+function showSuccess(
+    paymentRecord,
+    courseRows
+){
+
+    document.getElementById(
+        "message"
+    ).innerHTML = "";
+
+
+    const selected =
+        Array.isArray(
+            paymentRecord.selected_courses
+        )
+        ? paymentRecord.selected_courses
+        : [];
+
+
+    let selectedHTML = "";
+
+
+    if(selected.length){
+
+        selectedHTML =
+            selected
+                .map(item => {
+
+                    const title =
+                        item.name ||
+                        item.title ||
+                        item.label ||
+                        item.category ||
+                        "Selected Course";
+
+
+                    const subtitle =
+                        item.subtitle ||
+                        item.unit ||
+                        item.description ||
+                        "";
+
+
+                    return `
+
+                        <div
+                            style="
+                                padding:8px 0;
+                                border-bottom:1px solid rgba(255,255,255,.06);
+                            "
+                        >
+
+                            <strong>
+                                ${escapeHTML(title)}
+                            </strong>
+
+                            ${
+                                subtitle
+                                ? `
+                                    <div style="
+                                        color:#94a3b8;
+                                        margin-top:3px;
+                                        font-size:12px;
+                                    ">
+                                        ${escapeHTML(subtitle)}
+                                    </div>
+                                `
+                                : ""
+                            }
+
+                        </div>
+
+                    `;
+
+                })
+                .join("");
+
+    }else{
+
+        selectedHTML =
+            courseRows
+                .map(
+                    row =>
+                        `<div style="padding:6px 0">
+                            ${escapeHTML(row.name)}
+                        </div>`
+                )
+                .join("");
+
+    }
+
+
+    document.getElementById(
+        "paymentArea"
+    ).innerHTML = `
+
+        <div
+            class="card success"
+            style="grid-column:1/-1"
+        >
+
+            <div class="success-icon">
+                ✓
+            </div>
+
+
+            <h2>
+                Payment Submitted Successfully
+            </h2>
+
+
+            <p style="
+                color:#94a3b8;
+                line-height:1.8;
+                max-width:650px;
+                margin:auto;
+            ">
+
+                Your payment information has been
+                submitted successfully.
+
+                <br>
+
+                Your payment is now waiting for
+                Dream Hunt admin approval.
+
+            </p>
+
+
+            <div class="status">
+                ⏳ PENDING • WAITING FOR APPROVAL
+            </div>
+
+
+            <div class="details">
+
+                <div class="detail">
+
+                    <span>
+                        Order ID
+                    </span>
+
+                    <span>
+                        ${escapeHTML(
+                            paymentRecord.order_id
+                        )}
+                    </span>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <span>
+                        Amount
+                    </span>
+
+                    <span>
+                        ৳${formatMoney(
+                            paymentRecord.amount
+                        )}
+                    </span>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <span>
+                        Payment Method
+                    </span>
+
+                    <span>
+                        ${escapeHTML(
+                            paymentRecord.payment_method
+                        )}
+                    </span>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <span>
+                        Transaction ID
+                    </span>
+
+                    <span>
+                        ${escapeHTML(
+                            paymentRecord.transaction_id
+                        )}
+                    </span>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <span>
+                        HSC Roll
+                    </span>
+
+                    <span>
+                        ${escapeHTML(
+                            paymentRecord.hsc_roll
+                        )}
+                    </span>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <span>
+                        HSC Registration
+                    </span>
+
+                    <span>
+                        ${escapeHTML(
+                            paymentRecord.hsc_registration
+                        )}
+                    </span>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <span>
+                        Selected Courses
+                    </span>
+
+                    <span>
+                        ${courseRows.length}
+                    </span>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <span>
+                        Status
+                    </span>
+
+                    <span style="
+                        color:#fbbf24;
+                    ">
+                        PENDING
+                    </span>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <span>
+                        Approval
+                    </span>
+
+                    <span style="
+                        color:#fbbf24;
+                    ">
+                        WAITING FOR APPROVAL
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="details"
+                style="text-align:left"
+            >
+
+                <div style="
+                    color:#94a3b8;
+                    font-size:12px;
+                    margin-bottom:10px;
+                ">
+                    Selected Package
+                </div>
+
+                ${selectedHTML}
+
+            </div>
+
+
+            <div class="pending-box">
+
+                <strong>
+                    ⏳ Waiting for approval
+                </strong>
+
+                <br>
+
+                Your payment is currently under review
+                by the Dream Hunt admin.
+
+                <br>
+
+                Once your payment is approved,
+                your selected course access will be
+                activated.
+
+            </div>
+
+
+            <button
+                class="back"
+                onclick="
+                    window.location.href='dashboard.html'
+                "
+            >
+                Go to Dashboard
+            </button>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+function showError(text){
+
+    document.getElementById(
+        "message"
+    ).innerHTML = `
+
+        <div class="error">
+
+            ${escapeHTML(text)}
+
+        </div>
+
+    `;
+}
+
+
+/* =========================================================
+   BACK
+========================================================= */
+
+function goBack(){
+
+    window.location.href =
+        "buy-courses.html";
+}
+
+
+/* =========================================================
+   FORMAT MONEY
+========================================================= */
+
+function formatMoney(value){
+
+    return Number(
+        value || 0
+    ).toLocaleString(
+        "en-BD"
+    );
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(value){
+
+    return String(
+        value ?? ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+/* =========================================================
+   INIT
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        loadCheckout();
+
+    }
+);
+
+</script>
+
+</body>
+</html>
