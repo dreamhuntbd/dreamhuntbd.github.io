@@ -1,0 +1,2535 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Dream Hunt | Results</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+/* =========================================================
+   DREAM HUNT — RESULTS
+========================================================= */
+
+:root{
+
+    --ink:#07111f;
+    --ink2:#0d1a2c;
+
+    --paper:#f5f7fb;
+    --white:#ffffff;
+
+    --text:#101828;
+    --muted:#667085;
+    --soft:#98a2b3;
+
+    --line:#e6eaf0;
+
+    --green:#087443;
+    --green-bg:#ecfdf3;
+
+    --red:#c01048;
+    --red-bg:#fff1f4;
+
+    --amber:#a45b00;
+    --amber-bg:#fff8e8;
+
+    --purple:#6841c6;
+    --purple-bg:#f5f3ff;
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+
+    min-height:100vh;
+
+    background:var(--paper);
+
+    color:var(--text);
+
+    font-family:
+        Inter,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    overflow-x:hidden;
+}
+
+a{
+    text-decoration:none;
+}
+
+button{
+    font-family:inherit;
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.sidebar{
+
+    position:fixed;
+
+    left:0;
+    top:0;
+
+    width:258px;
+    height:100vh;
+
+    padding:23px 14px;
+
+    overflow-y:auto;
+
+    z-index:1000;
+
+    color:#fff;
+
+    background:
+        radial-gradient(
+            circle at 90% 5%,
+            rgba(255,255,255,.075),
+            transparent 30%
+        ),
+        linear-gradient(
+            180deg,
+            #07111f 0%,
+            #0d1727 100%
+        );
+
+    border-right:
+        1px solid
+        rgba(255,255,255,.055);
+}
+
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.logo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:11px;
+
+    padding:
+        5px
+        11px
+        28px;
+}
+
+.logo-mark{
+
+    width:40px;
+    height:40px;
+
+    border-radius:13px;
+
+    background:#fff;
+
+    color:#07111f;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    font-size:17px;
+
+    font-weight:950;
+
+    box-shadow:
+        0 10px 30px
+        rgba(255,255,255,.08);
+}
+
+.logo-name{
+
+    color:#fff;
+
+    font-size:21px;
+
+    font-weight:900;
+
+    letter-spacing:-.7px;
+}
+
+
+/* =========================================================
+   NAV
+========================================================= */
+
+.nav-label{
+
+    padding:
+        12px
+        13px
+        7px;
+
+    color:#536276;
+
+    font-size:9px;
+
+    font-weight:900;
+
+    letter-spacing:1.5px;
+
+    text-transform:uppercase;
+}
+
+.nav a{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    margin-bottom:3px;
+
+    padding:
+        11px
+        13px;
+
+    border-radius:11px;
+
+    color:#aab6c8;
+
+    font-size:13px;
+
+    font-weight:650;
+
+    transition:.2s ease;
+}
+
+.nav a:hover{
+
+    color:#fff;
+
+    background:
+        rgba(255,255,255,.055);
+}
+
+.nav a.active{
+
+    color:#fff;
+
+    background:
+        rgba(255,255,255,.10);
+
+    box-shadow:
+        inset 3px 0 0 #fff;
+}
+
+.nav-icon{
+
+    width:20px;
+
+    text-align:center;
+
+    font-size:16px;
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.main{
+
+    min-height:100vh;
+
+    margin-left:258px;
+
+    padding:
+        32px
+        34px
+        60px;
+}
+
+.container{
+
+    width:100%;
+
+    max-width:1160px;
+
+    margin:auto;
+}
+
+
+/* =========================================================
+   BREADCRUMB
+========================================================= */
+
+.page-top{
+
+    margin-bottom:25px;
+}
+
+.breadcrumb{
+
+    color:#9aa5b5;
+
+    font-size:11px;
+
+    font-weight:650;
+}
+
+.breadcrumb span{
+
+    margin:
+        0 6px;
+
+    color:#c5ccd6;
+}
+
+.breadcrumb strong{
+
+    color:#344054;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+
+    position:relative;
+
+    min-height:230px;
+
+    overflow:hidden;
+
+    padding:
+        34px
+        37px;
+
+    margin-bottom:25px;
+
+    border-radius:27px;
+
+    color:#fff;
+
+    background:
+
+        radial-gradient(
+            circle at 87% 20%,
+            rgba(255,255,255,.09),
+            transparent 25%
+        ),
+
+        radial-gradient(
+            circle at 72% 115%,
+            rgba(255,255,255,.055),
+            transparent 32%
+        ),
+
+        linear-gradient(
+            125deg,
+            #07111f,
+            #111f35 55%,
+            #172840
+        );
+
+    box-shadow:
+        0 22px 55px
+        rgba(7,17,31,.15);
+}
+
+.hero::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:250px;
+    height:250px;
+
+    right:-90px;
+    top:-105px;
+
+    border-radius:50%;
+
+    border:
+        1px solid
+        rgba(255,255,255,.10);
+
+    box-shadow:
+        0 0 0 28px rgba(255,255,255,.018),
+        0 0 0 58px rgba(255,255,255,.012);
+}
+
+.hero-content{
+
+    position:relative;
+
+    z-index:2;
+
+    max-width:700px;
+}
+
+.hero-kicker{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:
+        7px
+        11px;
+
+    margin-bottom:15px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.09);
+
+    border-radius:30px;
+
+    background:
+        rgba(255,255,255,.055);
+
+    color:#b8c4d5;
+
+    font-size:9px;
+
+    font-weight:850;
+
+    letter-spacing:1.5px;
+
+    text-transform:uppercase;
+}
+
+.hero h1{
+
+    margin-bottom:10px;
+
+    color:#fff;
+
+    font-size:35px;
+
+    line-height:1.12;
+
+    letter-spacing:-1.3px;
+}
+
+.hero p{
+
+    max-width:600px;
+
+    color:#9caabd;
+
+    font-size:13px;
+
+    line-height:1.75;
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.error{
+
+    display:none;
+
+    padding:14px 16px;
+
+    margin-bottom:20px;
+
+    border:
+        1px solid
+        #fecdd3;
+
+    border-radius:13px;
+
+    background:#fff1f2;
+
+    color:#9f1239;
+
+    font-size:11px;
+
+    line-height:1.6;
+}
+
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+.section{
+
+    margin-bottom:34px;
+}
+
+.section-header{
+
+    display:flex;
+
+    align-items:flex-end;
+
+    justify-content:space-between;
+
+    margin-bottom:13px;
+}
+
+.section-title{
+
+    color:#101828;
+
+    font-size:19px;
+
+    font-weight:900;
+
+    letter-spacing:-.5px;
+}
+
+.section-description{
+
+    margin-top:4px;
+
+    color:#98a2b3;
+
+    font-size:11px;
+}
+
+.section-count{
+
+    color:#98a2b3;
+
+    font-size:10px;
+
+    font-weight:800;
+}
+
+
+/* =========================================================
+   RESULTS LIST
+========================================================= */
+
+.results-list{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+}
+
+
+/* =========================================================
+   RESULT CARD
+========================================================= */
+
+.result-card{
+
+    position:relative;
+
+    overflow:hidden;
+
+    padding:
+        18px
+        19px;
+
+    border:
+        1px solid
+        var(--line);
+
+    border-radius:18px;
+
+    background:#fff;
+
+    box-shadow:
+        0 7px 25px
+        rgba(15,23,42,.032);
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        border-color .2s ease;
+}
+
+.result-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+    top:0;
+
+    width:3px;
+    height:100%;
+
+    background:#dce2ea;
+}
+
+.result-card.published::before{
+
+    background:#101828;
+}
+
+.result-card:hover{
+
+    transform:translateY(-2px);
+
+    border-color:#d9dfe8;
+
+    box-shadow:
+        0 14px 35px
+        rgba(15,23,42,.065);
+}
+
+
+/* =========================================================
+   RESULT ROW
+========================================================= */
+
+.result-row{
+
+    display:grid;
+
+    grid-template-columns:
+        45px
+        minmax(200px,1fr)
+        auto
+        auto
+        auto
+        120px;
+
+    align-items:center;
+
+    gap:17px;
+}
+
+.result-index{
+
+    width:43px;
+    height:43px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    border-radius:12px;
+
+    background:#f2f4f7;
+
+    color:#344054;
+
+    font-size:11px;
+
+    font-weight:900;
+}
+
+
+/* =========================================================
+   EXAM INFO
+========================================================= */
+
+.exam-title{
+
+    margin-bottom:5px;
+
+    color:#111827;
+
+    font-size:14px;
+
+    font-weight:850;
+
+    line-height:1.45;
+}
+
+.exam-date{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:5px;
+
+    color:#98a2b3;
+
+    font-size:10px;
+
+    font-weight:600;
+}
+
+
+/* =========================================================
+   METRICS
+========================================================= */
+
+.metric{
+
+    min-width:72px;
+}
+
+.metric-label{
+
+    display:block;
+
+    margin-bottom:5px;
+
+    color:#a0a9b7;
+
+    font-size:8px;
+
+    font-weight:900;
+
+    letter-spacing:.75px;
+
+    text-transform:uppercase;
+}
+
+.metric-value{
+
+    color:#344054;
+
+    font-size:13px;
+
+    font-weight:850;
+}
+
+.metric-score{
+
+    color:#087443;
+}
+
+.metric-rank{
+
+    color:#6841c6;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:5px;
+
+    width:max-content;
+
+    padding:
+        6px
+        9px;
+
+    border-radius:20px;
+
+    font-size:8px;
+
+    font-weight:900;
+
+    letter-spacing:.45px;
+
+    text-transform:uppercase;
+}
+
+.status::before{
+
+    content:"";
+
+    width:5px;
+    height:5px;
+
+    border-radius:50%;
+
+    background:currentColor;
+}
+
+.status.published{
+
+    color:var(--green);
+
+    background:var(--green-bg);
+}
+
+.status.pending{
+
+    color:var(--amber);
+
+    background:var(--amber-bg);
+}
+
+
+/* =========================================================
+   VIEW ANALYSIS
+========================================================= */
+
+.view-btn{
+
+    width:120px;
+
+    padding:
+        10px
+        12px;
+
+    border:0;
+
+    border-radius:10px;
+
+    background:#101828;
+
+    color:#fff;
+
+    font-size:10px;
+
+    font-weight:850;
+
+    cursor:pointer;
+
+    transition:.2s ease;
+}
+
+.view-btn:hover{
+
+    background:#000;
+
+    transform:translateY(-1px);
+}
+
+.view-btn.disabled{
+
+    background:#f2f4f7;
+
+    color:#98a2b3;
+
+    cursor:default;
+}
+
+.view-btn.disabled:hover{
+
+    transform:none;
+}
+
+
+/* =========================================================
+   DETAILS
+========================================================= */
+
+.result-details{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    align-items:center;
+
+    gap:7px;
+
+    padding-top:14px;
+
+    margin-top:15px;
+
+    border-top:
+        1px solid
+        #f0f2f5;
+}
+
+.detail{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:5px;
+
+    padding:
+        6px
+        9px;
+
+    border-radius:8px;
+
+    font-size:9px;
+
+    font-weight:800;
+}
+
+.detail.correct{
+
+    color:#087443;
+
+    background:#ecfdf3;
+}
+
+.detail.wrong{
+
+    color:#be123c;
+
+    background:#fff1f2;
+}
+
+.detail.skipped{
+
+    color:#667085;
+
+    background:#f2f4f7;
+}
+
+.detail.negative{
+
+    color:#c2410c;
+
+    background:#fff7ed;
+}
+
+
+/* =========================================================
+   PENDING NOTE
+========================================================= */
+
+.pending-note{
+
+    padding-top:13px;
+
+    margin-top:14px;
+
+    border-top:
+        1px solid
+        #f0f2f5;
+
+    color:#98a2b3;
+
+    font-size:10px;
+
+    line-height:1.6;
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.empty{
+
+    padding:
+        62px
+        20px;
+
+    border:
+        1px dashed
+        #d5dbe5;
+
+    border-radius:20px;
+
+    background:#fff;
+
+    text-align:center;
+}
+
+.empty-icon{
+
+    width:63px;
+    height:63px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    margin:
+        0 auto
+        17px;
+
+    border-radius:18px;
+
+    background:#f2f4f7;
+
+    color:#344054;
+
+    font-size:25px;
+}
+
+.empty h3{
+
+    margin-bottom:7px;
+
+    color:#1d2939;
+
+    font-size:17px;
+}
+
+.empty p{
+
+    max-width:460px;
+
+    margin:auto;
+
+    color:#98a2b3;
+
+    font-size:11px;
+
+    line-height:1.7;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.loading{
+
+    padding:
+        60px
+        20px;
+
+    border:
+        1px solid
+        var(--line);
+
+    border-radius:19px;
+
+    background:#fff;
+
+    color:#98a2b3;
+
+    font-size:11px;
+
+    text-align:center;
+}
+
+.loader{
+
+    width:29px;
+    height:29px;
+
+    margin:
+        0 auto
+        13px;
+
+    border:
+        3px solid
+        #e7ebf0;
+
+    border-top-color:#111827;
+
+    border-radius:50%;
+
+    animation:
+        spin .75s linear infinite;
+}
+
+@keyframes spin{
+
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+
+/* =========================================================
+   MOBILE NAV
+========================================================= */
+
+.mobile-nav{
+
+    display:none;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1050px){
+
+    .result-row{
+
+        grid-template-columns:
+            43px
+            minmax(180px,1fr)
+            auto
+            auto
+            115px;
+    }
+
+    .result-row .metric:nth-of-type(2){
+
+        display:none;
+    }
+
+    .view-btn{
+
+        width:115px;
+    }
+}
+
+
+@media(max-width:820px){
+
+    .sidebar{
+
+        width:70px;
+
+        padding:
+            20px 7px;
+    }
+
+    .logo{
+
+        justify-content:center;
+
+        padding:
+            4px 0
+            26px;
+    }
+
+    .logo-name{
+
+        display:none;
+    }
+
+    .nav-label{
+
+        display:none;
+    }
+
+    .nav a{
+
+        justify-content:center;
+
+        padding:
+            12px 5px;
+
+        font-size:0;
+    }
+
+    .nav-icon{
+
+        font-size:17px;
+    }
+
+    .main{
+
+        margin-left:70px;
+
+        padding:
+            24px
+            17px
+            40px;
+    }
+
+    .result-row{
+
+        grid-template-columns:
+            43px
+            1fr
+            auto;
+    }
+
+    .metric{
+
+        display:none;
+    }
+
+    .view-btn{
+
+        grid-column:3;
+
+        width:110px;
+    }
+}
+
+
+@media(max-width:600px){
+
+    .sidebar{
+
+        display:none;
+    }
+
+    .main{
+
+        margin-left:0;
+
+        padding:
+            16px
+            14px
+            90px;
+    }
+
+    .hero{
+
+        min-height:210px;
+
+        padding:
+            27px
+            22px;
+
+        margin-bottom:21px;
+
+        border-radius:21px;
+    }
+
+    .hero h1{
+
+        font-size:28px;
+
+        letter-spacing:-1px;
+    }
+
+    .hero p{
+
+        font-size:11px;
+
+        line-height:1.75;
+    }
+
+    .section-title{
+
+        font-size:18px;
+    }
+
+    .result-card{
+
+        padding:16px;
+    }
+
+    .result-row{
+
+        grid-template-columns:
+            40px
+            1fr;
+
+        gap:11px;
+    }
+
+    .result-index{
+
+        width:39px;
+        height:39px;
+    }
+
+    .exam-title{
+
+        font-size:13px;
+    }
+
+    .view-btn{
+
+        grid-column:
+            1 / -1;
+
+        width:100%;
+
+        margin-top:4px;
+    }
+
+    .status{
+
+        margin-top:3px;
+    }
+
+    .detail{
+
+        font-size:8px;
+
+        padding:
+            6px
+            8px;
+    }
+
+    .mobile-nav{
+
+        position:fixed;
+
+        left:10px;
+        right:10px;
+        bottom:10px;
+
+        height:62px;
+
+        display:flex;
+
+        align-items:center;
+        justify-content:space-around;
+
+        z-index:2000;
+
+        border:
+            1px solid
+            rgba(255,255,255,.08);
+
+        border-radius:18px;
+
+        background:
+            rgba(8,17,31,.96);
+
+        backdrop-filter:
+            blur(16px);
+
+        box-shadow:
+            0 15px 45px
+            rgba(0,0,0,.2);
+    }
+
+    .mobile-nav a{
+
+        display:flex;
+
+        flex-direction:column;
+
+        align-items:center;
+
+        gap:4px;
+
+        color:#8491a5;
+
+        font-size:8px;
+
+        font-weight:800;
+    }
+
+    .mobile-nav a.active{
+
+        color:#fff;
+    }
+
+    .mobile-nav span{
+
+        font-size:17px;
+    }
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =======================================================
+     SIDEBAR
+======================================================= -->
+
+<aside class="sidebar">
+
+    <div class="logo">
+
+        <div class="logo-mark">
+            D
+        </div>
+
+        <div class="logo-name">
+            Dream Hunt
+        </div>
+
+    </div>
+
+
+    <nav class="nav">
+
+        <div class="nav-label">
+            Main
+        </div>
+
+
+        <a href="dashboard.html">
+            <span class="nav-icon">⌂</span>
+            Dashboard
+        </a>
+
+
+        <a href="profile.html">
+            <span class="nav-icon">◉</span>
+            My Profile
+        </a>
+
+
+        <a href="enrolled-courses.html">
+            <span class="nav-icon">▣</span>
+            Enrolled Courses
+        </a>
+
+
+        <a href="buy-courses.html">
+            <span class="nav-icon">＋</span>
+            Buy Courses
+        </a>
+
+
+        <div class="nav-label">
+            Academic
+        </div>
+
+
+        <a href="progress.html">
+            <span class="nav-icon">↗</span>
+            Progress
+        </a>
+
+
+        <a href="exams.html">
+            <span class="nav-icon">□</span>
+            My Exams
+        </a>
+
+
+        <a
+            href="results.html"
+            class="active"
+        >
+            <span class="nav-icon">◆</span>
+            Results
+        </a>
+
+
+        <a href="my-target.html">
+            <span class="nav-icon">◎</span>
+            My Target
+        </a>
+
+
+        <div class="nav-label">
+            More
+        </div>
+
+
+        <a href="admission-updates.html">
+            <span class="nav-icon">◇</span>
+            Admission Updates
+        </a>
+
+
+        <a href="notifications.html">
+            <span class="nav-icon">◌</span>
+            Notifications
+        </a>
+
+
+        <a href="contact.html">
+            <span class="nav-icon">✉</span>
+            Contact Us
+        </a>
+
+
+        <a href="faq.html">
+            <span class="nav-icon">?</span>
+            FAQ
+        </a>
+
+
+        <a href="settings.html">
+            <span class="nav-icon">⚙</span>
+            Settings
+        </a>
+
+    </nav>
+
+</aside>
+
+
+
+<!-- =======================================================
+     MAIN
+======================================================= -->
+
+<main class="main">
+
+<div class="container">
+
+
+    <div class="page-top">
+
+        <div class="breadcrumb">
+
+            Dream Hunt
+
+            <span>/</span>
+
+            <strong>Results</strong>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ===================================================
+         HERO
+    =================================================== -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <div class="hero-kicker">
+                ◆ Dream Hunt · Exam Results
+            </div>
+
+
+            <h1>
+                Your Exam Results
+            </h1>
+
+
+            <p>
+
+                Every examination you have submitted,
+                every published result, and every
+                important result detail — organized
+                in one place.
+
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ERROR -->
+
+    <div
+        id="errorBox"
+        class="error">
+    </div>
+
+
+
+    <!-- ===================================================
+         RECENT RESULTS
+    =================================================== -->
+
+    <section
+        class="section"
+        id="recentSection"
+    >
+
+        <div class="section-header">
+
+            <div>
+
+                <div class="section-title">
+                    Recent Results
+                </div>
+
+                <div class="section-description">
+                    Your latest submitted examinations
+                </div>
+
+            </div>
+
+
+            <div
+                class="section-count"
+                id="recentCount">
+
+                0 exams
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="recentResults"
+            class="results-list">
+
+            <div class="loading">
+
+                <div class="loader"></div>
+
+                Loading your results...
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ===================================================
+         PREVIOUS RESULTS
+    =================================================== -->
+
+    <section
+        class="section"
+        id="previousSection"
+    >
+
+        <div class="section-header">
+
+            <div>
+
+                <div class="section-title">
+                    Previous Results
+                </div>
+
+                <div class="section-description">
+                    Your earlier submitted examinations
+                </div>
+
+            </div>
+
+
+            <div
+                class="section-count"
+                id="previousCount">
+
+                0 exams
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="previousResults"
+            class="results-list">
+        </div>
+
+    </section>
+
+
+</div>
+
+</main>
+
+
+
+<!-- =======================================================
+     MOBILE NAV
+======================================================= -->
+
+<nav class="mobile-nav">
+
+
+    <a href="dashboard.html">
+
+        <span>⌂</span>
+
+        Home
+
+    </a>
+
+
+    <a href="exams.html">
+
+        <span>□</span>
+
+        Exams
+
+    </a>
+
+
+    <a
+        href="results.html"
+        class="active"
+    >
+
+        <span>◆</span>
+
+        Results
+
+    </a>
+
+
+    <a href="notifications.html">
+
+        <span>◌</span>
+
+        Alerts
+
+    </a>
+
+
+    <a href="settings.html">
+
+        <span>⚙</span>
+
+        Settings
+
+    </a>
+
+</nav>
+
+
+
+<script>
+
+/* =========================================================
+   SUPABASE
+========================================================= */
+
+const SUPABASE_URL =
+    "https://rndtgjuwwsxxiiezennr.supabase.co";
+
+
+const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_mIQfKUUsEOlDtqEdroMpgQ_I8ElRcsN";
+
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
+
+
+/* =========================================================
+   INIT
+========================================================= */
+
+async function init(){
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient.auth.getSession();
+
+
+        if(error){
+
+            throw error;
+        }
+
+
+        const session =
+            data.session;
+
+
+        if(!session){
+
+            window.location.href =
+                "index.html";
+
+            return;
+        }
+
+
+        await loadResults();
+
+    }
+    catch(error){
+
+        console.error(
+            "Results initialization error:",
+            error
+        );
+
+
+        showError(
+            "Unable to load your results. Please login again."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   LOAD RESULTS
+========================================================= */
+
+async function loadResults(){
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient.rpc(
+            "get_my_exam_results"
+        );
+
+
+        if(error){
+
+            throw error;
+        }
+
+
+        const results =
+            Array.isArray(data)
+                ? data
+                : [];
+
+
+        if(results.length === 0){
+
+            showNoResults();
+
+            return;
+        }
+
+
+        /*
+         * RPC already returns the latest
+         * submitted attempt for each exam.
+         *
+         * Latest 3:
+         * Recent Results
+         *
+         * Remaining:
+         * Previous Results
+         */
+
+        const recent =
+            results.slice(
+                0,
+                3
+            );
+
+
+        const previous =
+            results.slice(
+                3
+            );
+
+
+        renderResults(
+            recent,
+            "recentResults",
+            0
+        );
+
+
+        renderResults(
+            previous,
+            "previousResults",
+            3
+        );
+
+
+        updateCount(
+            "recentCount",
+            recent.length
+        );
+
+
+        updateCount(
+            "previousCount",
+            previous.length
+        );
+
+
+        if(previous.length === 0){
+
+            document.getElementById(
+                "previousSection"
+            ).style.display =
+                "none";
+
+        }
+
+    }
+    catch(error){
+
+        console.error(
+            "Results loading error:",
+            error
+        );
+
+
+        showError(
+            "Unable to load your exam results right now."
+        );
+
+
+        document.getElementById(
+            "recentResults"
+        ).innerHTML =
+            "";
+
+
+        document.getElementById(
+            "previousSection"
+        ).style.display =
+            "none";
+
+    }
+
+}
+
+
+/* =========================================================
+   COUNT
+========================================================= */
+
+function updateCount(
+    elementId,
+    count
+){
+
+    const element =
+        document.getElementById(
+            elementId
+        );
+
+
+    element.textContent =
+        `${count} ${
+            count === 1
+                ? "exam"
+                : "exams"
+        }`;
+
+}
+
+
+/* =========================================================
+   RENDER RESULTS
+========================================================= */
+
+function renderResults(
+    results,
+    containerId,
+    startIndex
+){
+
+    const container =
+        document.getElementById(
+            containerId
+        );
+
+
+    if(!results.length){
+
+        container.innerHTML =
+            "";
+
+        return;
+    }
+
+
+    container.innerHTML =
+        results
+            .map(
+                (result,index) =>
+
+                    createResultCard(
+                        result,
+                        startIndex + index
+                    )
+            )
+            .join("");
+
+}
+
+
+/* =========================================================
+   CREATE RESULT CARD
+========================================================= */
+
+function createResultCard(
+    result,
+    index
+){
+
+    const published =
+        result.result_published === true;
+
+
+    const score =
+        toNumber(
+            result.total_mark
+        );
+
+
+    const totalMarks =
+        toNumber(
+            result.total_marks
+        );
+
+
+    const correct =
+        toNumber(
+            result.correct_answers
+        );
+
+
+    const wrong =
+        toNumber(
+            result.wrong_answers
+        );
+
+
+    const skipped =
+        toNumber(
+            result.skipped_answers
+        );
+
+
+    const negative =
+        toNumber(
+            result.negative_mark
+        );
+
+
+    const rank =
+        toNumber(
+            result.merit_position
+        );
+
+
+    let percentage = null;
+
+
+    if(
+        score !== null &&
+        totalMarks !== null &&
+        totalMarks > 0
+    ){
+
+        percentage =
+            (
+                score /
+                totalMarks
+            ) * 100;
+
+    }
+
+
+    const statusHTML =
+        published
+
+            ? `
+                <span class="status published">
+                    Result Published
+                </span>
+              `
+
+            : `
+                <span class="status pending">
+                    Result Pending
+                </span>
+              `;
+
+
+    const scoreHTML =
+        published && score !== null
+
+            ? `
+                <div class="metric">
+
+                    <span class="metric-label">
+                        Score
+                    </span>
+
+                    <span class="metric-value metric-score">
+                        ${formatNumber(score)}
+                        /
+                        ${formatNumber(totalMarks)}
+                    </span>
+
+                </div>
+              `
+
+            : "";
+
+
+    const rankHTML =
+        published && rank !== null
+
+            ? `
+                <div class="metric">
+
+                    <span class="metric-label">
+                        Rank
+                    </span>
+
+                    <span class="metric-value metric-rank">
+                        #${formatNumber(rank)}
+                    </span>
+
+                </div>
+              `
+
+            : "";
+
+
+    const percentageHTML =
+        published && percentage !== null
+
+            ? `
+                <div class="metric">
+
+                    <span class="metric-label">
+                        Score %
+                    </span>
+
+                    <span class="metric-value">
+                        ${percentage.toFixed(1)}%
+                    </span>
+
+                </div>
+              `
+
+            : "";
+
+
+    /*
+     * IMPORTANT:
+     *
+     * Analysis now goes to:
+     *
+     * performances.html?exam_id=...
+     *
+     */
+
+    const buttonHTML =
+        published
+
+            ? `
+                <button
+                    class="view-btn"
+                    onclick="viewAnalysis('${escapeHTML(
+                        result.exam_id
+                    )}')"
+                >
+                    View Analysis →
+                </button>
+              `
+
+            : `
+                <button
+                    class="view-btn disabled"
+                    disabled
+                >
+                    Awaiting Result
+                </button>
+              `;
+
+
+    const detailsHTML =
+        published
+
+            ? `
+
+                <div class="result-details">
+
+                    <span class="detail correct">
+                        ✓ Correct:
+                        ${formatNumber(correct)}
+                    </span>
+
+
+                    <span class="detail wrong">
+                        × Wrong:
+                        ${formatNumber(wrong)}
+                    </span>
+
+
+                    <span class="detail skipped">
+                        ○ Skipped:
+                        ${formatNumber(skipped)}
+                    </span>
+
+
+                    <span class="detail negative">
+                        − Negative:
+                        ${formatNumber(negative)}
+                    </span>
+
+                </div>
+
+              `
+
+            : `
+
+                <div class="pending-note">
+
+                    You have submitted this examination.
+                    Dream Hunt has not published the result yet.
+                    Your result will appear automatically after publication.
+
+                </div>
+
+              `;
+
+
+    return `
+
+        <article
+            class="
+                result-card
+                ${published ? "published" : ""}
+            "
+        >
+
+
+            <div class="result-row">
+
+
+                <div class="result-index">
+
+                    ${String(
+                        index + 1
+                    ).padStart(2,"0")}
+
+                </div>
+
+
+                <div>
+
+                    <div class="exam-title">
+
+                        ${escapeHTML(
+                            result.exam_title ||
+                            "Dream Hunt Exam"
+                        )}
+
+                    </div>
+
+
+                    <div class="exam-date">
+
+                        ◷
+
+                        ${formatDate(
+                            result.exam_date
+                        )}
+
+                    </div>
+
+                </div>
+
+
+                ${scoreHTML}
+
+
+                ${rankHTML}
+
+
+                ${percentageHTML}
+
+
+                <div>
+
+                    ${statusHTML}
+
+                </div>
+
+
+                ${buttonHTML}
+
+
+            </div>
+
+
+            ${detailsHTML}
+
+
+        </article>
+
+    `;
+
+}
+
+
+/* =========================================================
+   VIEW ANALYSIS
+========================================================= */
+
+function viewAnalysis(
+    examId
+){
+
+    if(!examId){
+
+        return;
+    }
+
+
+    window.location.href =
+        "performances.html?exam_id=" +
+        encodeURIComponent(
+            examId
+        );
+
+}
+
+
+/* =========================================================
+   NO RESULTS
+========================================================= */
+
+function showNoResults(){
+
+    document.getElementById(
+        "recentSection"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "previousSection"
+    ).innerHTML = `
+
+        <div class="section-header">
+
+            <div>
+
+                <div class="section-title">
+                    Exam Results
+                </div>
+
+                <div class="section-description">
+                    Your submitted examination results will appear here
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="empty">
+
+            <div class="empty-icon">
+                ◆
+            </div>
+
+
+            <h3>
+                No Exam Results Yet
+            </h3>
+
+
+            <p>
+
+                Once you submit an examination through
+                Dream Hunt, it will automatically appear
+                here. Published results will include your
+                marks, answers, mistakes and merit position.
+
+            </p>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+function showError(
+    message
+){
+
+    const box =
+        document.getElementById(
+            "errorBox"
+        );
+
+
+    box.style.display =
+        "block";
+
+
+    box.textContent =
+        message;
+
+}
+
+
+/* =========================================================
+   DATE FORMAT
+========================================================= */
+
+function formatDate(
+    value
+){
+
+    if(!value){
+
+        return "Date unavailable";
+    }
+
+
+    const date =
+        new Date(value);
+
+
+    if(
+        Number.isNaN(
+            date.getTime()
+        )
+    ){
+
+        return "Date unavailable";
+    }
+
+
+    return date.toLocaleDateString(
+        "en-GB",
+        {
+            day:"2-digit",
+            month:"short",
+            year:"numeric"
+        }
+    );
+
+}
+
+
+/* =========================================================
+   NUMBER
+========================================================= */
+
+function toNumber(
+    value
+){
+
+    if(
+        value === null ||
+        value === undefined ||
+        value === ""
+    ){
+
+        return null;
+    }
+
+
+    const number =
+        Number(value);
+
+
+    return Number.isFinite(number)
+        ? number
+        : null;
+
+}
+
+
+function formatNumber(
+    value
+){
+
+    const number =
+        toNumber(value);
+
+
+    if(number === null){
+
+        return "—";
+    }
+
+
+    if(
+        Number.isInteger(number)
+    ){
+
+        return String(number);
+    }
+
+
+    return number
+        .toFixed(2)
+        .replace(
+            /0+$/,
+            ""
+        )
+        .replace(
+            /\.$/,
+            ""
+        );
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(
+    value
+){
+
+    if(
+        value === null ||
+        value === undefined
+    ){
+
+        return "";
+    }
+
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+init();
+
+</script>
+
+</body>
+
+</html>

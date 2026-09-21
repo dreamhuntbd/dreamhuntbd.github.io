@@ -1,0 +1,1841 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dream Hunt | Library</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Inter,Arial,sans-serif;
+    background:#f5f7fb;
+    color:#111827;
+}
+
+button,input{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+/* =========================
+   TOPBAR
+========================= */
+
+.topbar{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    height:70px;
+    background:rgba(255,255,255,.92);
+    backdrop-filter:blur(18px);
+    border-bottom:1px solid #e5e7eb;
+}
+
+.topbar-inner{
+    max-width:1180px;
+    height:100%;
+    margin:auto;
+    padding:0 20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.logo{
+    text-decoration:none;
+    font-size:24px;
+    font-weight:950;
+    letter-spacing:-1px;
+    color:#111827;
+}
+
+.logo span{
+    color:#6366f1;
+}
+
+.dashboard-btn{
+    border:none;
+    background:#111827;
+    color:white;
+    padding:10px 15px;
+    border-radius:9px;
+    font-size:12px;
+    font-weight:850;
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+    position:relative;
+    overflow:hidden;
+    text-align:center;
+    padding:75px 20px 55px;
+    background:
+        radial-gradient(circle at 15% 20%,rgba(99,102,241,.16),transparent 25%),
+        radial-gradient(circle at 85% 20%,rgba(14,165,233,.13),transparent 25%),
+        #f8fafc;
+}
+
+.hero::before{
+    content:"";
+    position:absolute;
+    width:300px;
+    height:300px;
+    border:1px solid rgba(99,102,241,.15);
+    border-radius:50%;
+    top:-160px;
+    left:-80px;
+    animation:orbit 14s linear infinite;
+}
+
+.hero::after{
+    content:"";
+    position:absolute;
+    width:240px;
+    height:240px;
+    border:1px dashed rgba(14,165,233,.18);
+    border-radius:50%;
+    right:-80px;
+    bottom:-150px;
+    animation:orbit 10s linear infinite reverse;
+}
+
+@keyframes orbit{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+.eyebrow{
+    color:#6366f1;
+    font-size:10px;
+    font-weight:950;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    margin-bottom:10px;
+}
+
+.hero h1{
+    position:relative;
+    z-index:2;
+    font-size:48px;
+    letter-spacing:-2.5px;
+    margin-bottom:12px;
+}
+
+.hero p{
+    position:relative;
+    z-index:2;
+    max-width:650px;
+    margin:auto;
+    color:#6b7280;
+    font-size:14px;
+    line-height:1.75;
+}
+
+/* =========================
+   LOCK
+========================= */
+
+.lock-wrapper{
+    max-width:650px;
+    margin:35px auto 90px;
+    padding:0 20px;
+}
+
+.lock-box{
+    position:relative;
+    overflow:hidden;
+    background:white;
+    border:1px solid #e5e7eb;
+    border-radius:25px;
+    padding:45px 30px;
+    text-align:center;
+    box-shadow:0 25px 80px rgba(15,23,42,.08);
+    animation:boxIn .7s ease both;
+}
+
+@keyframes boxIn{
+    from{
+        opacity:0;
+        transform:translateY(20px) scale(.98);
+    }
+
+    to{
+        opacity:1;
+        transform:none;
+    }
+}
+
+.lock-box::before{
+    content:"";
+    position:absolute;
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    background:radial-gradient(circle,rgba(99,102,241,.13),transparent 70%);
+    top:-90px;
+    left:-70px;
+}
+
+.lock-icon{
+    position:relative;
+    width:76px;
+    height:76px;
+    margin:0 auto 20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:23px;
+    background:#eef2ff;
+    font-size:33px;
+    box-shadow:0 12px 30px rgba(99,102,241,.12);
+}
+
+.lock-box h2{
+    position:relative;
+    font-size:28px;
+    letter-spacing:-1px;
+    margin-bottom:10px;
+}
+
+.lock-box p{
+    position:relative;
+    max-width:520px;
+    margin:0 auto 25px;
+    color:#6b7280;
+    font-size:13px;
+    line-height:1.7;
+}
+
+.no-paid,
+.payment-pending,
+.loading-error{
+    display:none;
+}
+
+.no-paid.show,
+.payment-pending.show,
+.loading-error.show{
+    display:block;
+}
+
+.no-paid .lock-icon{
+    background:#fff7ed;
+}
+
+.pending-icon{
+    background:#fff7ed;
+}
+
+/* =========================
+   LIBRARY
+========================= */
+
+#libraryContent{
+    display:none;
+    max-width:1180px;
+    margin:auto;
+    padding:30px 20px 90px;
+    animation:contentIn .6s ease;
+}
+
+@keyframes contentIn{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+
+    to{
+        opacity:1;
+        transform:none;
+    }
+}
+
+.library-head{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:20px;
+    margin-bottom:25px;
+}
+
+.library-head h2{
+    font-size:29px;
+    letter-spacing:-1.2px;
+}
+
+.library-head p{
+    color:#6b7280;
+    font-size:12px;
+    margin-top:6px;
+}
+
+.unlocked-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:8px 12px;
+    border-radius:20px;
+    background:#ecfdf5;
+    color:#047857;
+    font-size:10px;
+    font-weight:900;
+    margin-bottom:8px;
+}
+
+.course-badge{
+    display:inline-block;
+    margin-top:8px;
+    padding:7px 11px;
+    border-radius:20px;
+    background:#eef2ff;
+    color:#4f46e5;
+    font-size:10px;
+    font-weight:900;
+}
+
+.search{
+    width:280px;
+    padding:12px 14px;
+    border:1px solid #d1d5db;
+    border-radius:10px;
+    outline:none;
+    background:white;
+}
+
+.search:focus{
+    border-color:#6366f1;
+    box-shadow:0 0 0 3px #eef2ff;
+}
+
+/* =========================
+   FILTER
+========================= */
+
+.filters{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:25px;
+}
+
+.filter{
+    border:1px solid #d1d5db;
+    background:white;
+    color:#4b5563;
+    padding:8px 13px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:850;
+    transition:.2s;
+}
+
+.filter:hover{
+    border-color:#818cf8;
+    color:#4f46e5;
+}
+
+.filter.active{
+    background:#4f46e5;
+    border-color:#4f46e5;
+    color:white;
+}
+
+/* =========================
+   GRID
+========================= */
+
+.resource-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+}
+
+.resource{
+    background:white;
+    border:1px solid #e5e7eb;
+    border-radius:18px;
+    padding:21px;
+    transition:.3s;
+    animation:cardIn .5s ease both;
+}
+
+.resource:hover{
+    transform:translateY(-6px);
+    border-color:#c7d2fe;
+    box-shadow:0 25px 55px rgba(15,23,42,.08);
+}
+
+@keyframes cardIn{
+    from{
+        opacity:0;
+        transform:translateY(12px);
+    }
+
+    to{
+        opacity:1;
+        transform:none;
+    }
+}
+
+.resource-icon{
+    width:48px;
+    height:48px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:14px;
+    background:#eef2ff;
+    font-size:21px;
+    margin-bottom:15px;
+}
+
+.resource-category{
+    color:#6366f1;
+    font-size:9px;
+    font-weight:950;
+    text-transform:uppercase;
+    letter-spacing:.8px;
+    margin-bottom:7px;
+}
+
+.resource h3{
+    font-size:17px;
+    margin-bottom:8px;
+}
+
+.resource p{
+    color:#6b7280;
+    font-size:12px;
+    line-height:1.65;
+    min-height:58px;
+    margin-bottom:16px;
+}
+
+.resource-btn{
+    width:100%;
+    padding:10px;
+    border:none;
+    border-radius:9px;
+    background:#111827;
+    color:white;
+    font-size:11px;
+    font-weight:900;
+}
+
+.resource-btn.disabled{
+    background:#f3f4f6;
+    color:#9ca3af;
+    cursor:not-allowed;
+}
+
+.empty{
+    grid-column:1/-1;
+    padding:70px 20px;
+    background:white;
+    border:1px dashed #d1d5db;
+    border-radius:18px;
+    text-align:center;
+    color:#6b7280;
+    font-size:13px;
+}
+
+.error-text{
+    color:#dc2626 !important;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:800px){
+
+    .hero{
+        padding:60px 18px 45px;
+    }
+
+    .hero h1{
+        font-size:37px;
+    }
+
+    .library-head{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .search{
+        width:100%;
+    }
+
+    .resource-grid{
+        grid-template-columns:1fr;
+    }
+
+    .lock-wrapper{
+        margin-top:25px;
+    }
+
+    .lock-box{
+        padding:38px 20px;
+    }
+
+    .topbar-inner{
+        padding:0 14px;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header class="topbar">
+
+<div class="topbar-inner">
+
+<a href="dashboard.html" class="logo">
+Dream<span>Hunt</span>
+</a>
+
+<button
+class="dashboard-btn"
+onclick="goDashboard()">
+← Dashboard
+</button>
+
+</div>
+
+</header>
+
+
+<section class="hero">
+
+<div class="eyebrow">
+Dream Hunt Private Resource Vault
+</div>
+
+<h1>
+The Library
+</h1>
+
+<p>
+A private collection of marked books, question banks,
+formula sheets, previous questions, notes and
+admission-focused resources.
+</p>
+
+</section>
+
+
+<div class="lock-wrapper">
+
+<!-- NO COURSE -->
+
+<div
+class="lock-box no-paid"
+id="noPaidBox">
+
+<div class="lock-icon">
+💳
+</div>
+
+<h2>
+Paid Course Required
+</h2>
+
+<p>
+The Dream Hunt Library is available only to students
+with an approved paid course enrollment.
+Please enroll in a Dream Hunt course first.
+</p>
+
+<button
+class="dashboard-btn"
+onclick="goCourses()">
+View Courses →
+</button>
+
+</div>
+
+
+<!-- PAYMENT PENDING -->
+
+<div
+class="lock-box payment-pending"
+id="pendingBox">
+
+<div class="lock-icon pending-icon">
+⏳
+</div>
+
+<h2>
+Payment Under Review
+</h2>
+
+<p>
+Your course payment has been submitted, but it has not
+been confirmed by Dream Hunt yet. Once your payment is
+approved, your Library access will automatically unlock.
+</p>
+
+<button
+class="dashboard-btn"
+onclick="goDashboard()">
+← Dashboard
+</button>
+
+</div>
+
+
+<!-- LOADING -->
+
+<div
+class="lock-box"
+id="loadingBox">
+
+<div class="lock-icon">
+🔐
+</div>
+
+<h2>
+Checking Access...
+</h2>
+
+<p>
+Please wait while we verify your Dream Hunt course
+enrollment.
+</p>
+
+</div>
+
+
+<!-- ERROR -->
+
+<div
+class="lock-box loading-error"
+id="errorBox">
+
+<div class="lock-icon">
+⚠️
+</div>
+
+<h2>
+Unable to Verify Access
+</h2>
+
+<p
+id="errorMessage"
+class="error-text">
+Something went wrong while checking your Library access.
+Please try again.
+</p>
+
+<button
+class="dashboard-btn"
+onclick="location.reload()">
+Try Again
+</button>
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     LIBRARY CONTENT
+========================= -->
+
+<main id="libraryContent">
+
+<div class="library-head">
+
+<div>
+
+<div class="unlocked-badge">
+✓ ACCESS GRANTED
+</div>
+
+<h2>
+Study Resources
+</h2>
+
+<p>
+Your private Dream Hunt resource collection.
+</p>
+
+<div
+class="course-badge"
+id="courseBadge">
+Paid Course
+</div>
+
+</div>
+
+<input
+class="search"
+id="searchInput"
+type="search"
+placeholder="Search resources...">
+
+</div>
+
+
+<div
+class="filters"
+id="filters">
+
+<button
+class="filter active"
+data-category="all">
+All
+</button>
+
+<button
+class="filter"
+data-category="marked-books">
+দাগানো বই
+</button>
+
+<button
+class="filter"
+data-category="question-bank">
+Question Bank
+</button>
+
+<button
+class="filter"
+data-category="important-notes">
+Important Notes
+</button>
+
+<button
+class="filter"
+data-category="formula-sheets">
+Formula Sheets
+</button>
+
+<button
+class="filter"
+data-category="previous-questions">
+Previous Questions
+</button>
+
+<button
+class="filter"
+data-category="short-tricks">
+Short Tricks
+</button>
+
+</div>
+
+
+<div
+class="resource-grid"
+id="resourceGrid">
+</div>
+
+</main>
+
+
+<script>
+
+/* =====================================================
+   SUPABASE
+===================================================== */
+
+const SUPABASE_URL =
+"https://rndtgjuwwsxxiiezennr.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+"sb_publishable_mIQfKUUsEOlDtqEdroMpgQ_I8ElRcsN";
+
+const supabaseClient =
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
+
+
+/* =====================================================
+   GLOBAL
+===================================================== */
+
+let resources = [];
+
+let activeCategory = "all";
+
+let activeCourses = [];
+
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+function goDashboard(){
+
+    window.location.href =
+    "dashboard.html";
+
+}
+
+
+function goCourses(){
+
+    window.location.href =
+    "buy-courses.html";
+
+}
+
+
+/* =====================================================
+   GET CURRENT USER
+===================================================== */
+
+async function getCurrentUser(){
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient.auth.getSession();
+
+
+        if(error){
+
+            console.error(
+                "Session error:",
+                error
+            );
+
+            return null;
+
+        }
+
+
+        return data.session?.user || null;
+
+    }catch(error){
+
+        console.error(
+            "User error:",
+            error
+        );
+
+        return null;
+
+    }
+
+}
+
+
+/* =====================================================
+   NORMALIZE CATEGORY
+===================================================== */
+
+function normalizeCourse(value){
+
+    if(!value){
+        return "";
+    }
+
+
+    const v =
+    String(value)
+    .toLowerCase()
+    .trim();
+
+
+    if(
+        v.includes("all") ||
+        v.includes("সব")
+    ){
+
+        return "all";
+
+    }
+
+
+    if(
+        v.includes("medical") ||
+        v.includes("med")
+    ){
+
+        return "medical";
+
+    }
+
+
+    if(
+        v.includes("engineering") ||
+        v.includes("engi")
+    ){
+
+        return "engineering";
+
+    }
+
+
+    if(
+        v.includes("public") ||
+        v.includes("university")
+    ){
+
+        return "public";
+
+    }
+
+
+    return v;
+
+}
+
+
+/* =====================================================
+   SHOW ONLY ONE BOX
+===================================================== */
+
+function showOnly(id){
+
+    const boxes = [
+        "noPaidBox",
+        "pendingBox",
+        "loadingBox",
+        "errorBox"
+    ];
+
+
+    boxes.forEach(
+        boxId => {
+
+            const element =
+            document.getElementById(
+                boxId
+            );
+
+
+            if(!element){
+                return;
+            }
+
+
+            if(boxId === id){
+
+                element.classList.add(
+                    "show"
+                );
+
+                element.style.display =
+                "block";
+
+            }else{
+
+                element.classList.remove(
+                    "show"
+                );
+
+                element.style.display =
+                "none";
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   CHECK ENROLLMENT
+===================================================== */
+
+async function checkPaidEnrollment(){
+
+    const user =
+    await getCurrentUser();
+
+
+    if(!user){
+
+        window.location.href =
+        "index.html";
+
+        return false;
+
+    }
+
+
+    try{
+
+        /*
+         * IMPORTANT:
+         *
+         * enrollments:
+         * user_id
+         * course_id
+         * order_id
+         * status
+         * status_progress
+         * enrolled_at
+         *
+         * courses:
+         * id
+         * category
+         *
+         * We DO NOT use enrollment.course_type.
+         */
+
+        const {
+            data: enrollments,
+            error: enrollmentError
+        } =
+        await supabaseClient
+        .from("enrollments")
+        .select(`
+            id,
+            user_id,
+            course_id,
+            order_id,
+            status,
+            status_progress,
+            enrolled_at,
+            courses (
+                id,
+                category
+            )
+        `)
+        .eq(
+            "user_id",
+            user.id
+        );
+
+
+        if(enrollmentError){
+
+            console.error(
+                "Enrollment error:",
+                enrollmentError
+            );
+
+            showError(
+                "Could not verify your enrollment. Please try again."
+            );
+
+            return false;
+
+        }
+
+
+        if(
+            !enrollments ||
+            enrollments.length === 0
+        ){
+
+            showOnly(
+                "noPaidBox"
+            );
+
+            return false;
+
+        }
+
+
+        /*
+         * ONLY APPROVED / PAID
+         * STUDENTS GET ACCESS.
+         */
+
+        const approved =
+        enrollments.filter(
+            enrollment => {
+
+                const status =
+                String(
+                    enrollment.status ||
+                    ""
+                )
+                .toLowerCase()
+                .trim();
+
+
+                return [
+                    "approved",
+                    "confirmed",
+                    "paid",
+                    "active",
+                    "success",
+                    "completed"
+                ].includes(
+                    status
+                );
+
+            }
+        );
+
+
+        /*
+         * PAYMENT SUBMITTED BUT
+         * NOT APPROVED YET.
+         */
+
+        if(
+            approved.length === 0
+        ){
+
+            showOnly(
+                "pendingBox"
+            );
+
+            return false;
+
+        }
+
+
+        /*
+         * GET COURSE CATEGORIES
+         * FROM COURSES TABLE.
+         */
+
+        activeCourses =
+        approved
+        .map(
+            enrollment => {
+
+                return normalizeCourse(
+                    enrollment.courses?.category
+                );
+
+            }
+        )
+        .filter(Boolean);
+
+
+        /*
+         * REMOVE DUPLICATES.
+         */
+
+        activeCourses =
+        [...new Set(
+            activeCourses
+        )];
+
+
+        /*
+         * ALL EXAM COURSE
+         * GETS EVERYTHING.
+         */
+
+        if(
+            activeCourses.includes(
+                "all"
+            )
+        ){
+
+            activeCourses = [
+                "all",
+                "public",
+                "medical",
+                "engineering"
+            ];
+
+        }
+
+
+        if(
+            activeCourses.length === 0
+        ){
+
+            showError(
+                "Your course category could not be identified."
+            );
+
+            return false;
+
+        }
+
+
+        return true;
+
+    }catch(error){
+
+        console.error(
+            "Access check error:",
+            error
+        );
+
+        showError(
+            "Something went wrong while checking your course access."
+        );
+
+        return false;
+
+    }
+
+}
+
+
+/* =====================================================
+   ERROR
+===================================================== */
+
+function showError(message){
+
+    showOnly(
+        "errorBox"
+    );
+
+
+    const errorMessage =
+    document.getElementById(
+        "errorMessage"
+    );
+
+
+    if(errorMessage){
+
+        errorMessage.textContent =
+        message;
+
+    }
+
+}
+
+
+/* =====================================================
+   COURSE LABEL
+===================================================== */
+
+function courseLabel(){
+
+    if(
+        activeCourses.includes(
+            "all"
+        )
+    ){
+
+        return "ALL EXAM ACCESS";
+
+    }
+
+
+    const labels = [];
+
+
+    if(
+        activeCourses.includes(
+            "public"
+        )
+    ){
+
+        labels.push(
+            "PUBLIC UNIVERSITY"
+        );
+
+    }
+
+
+    if(
+        activeCourses.includes(
+            "medical"
+        )
+    ){
+
+        labels.push(
+            "MEDICAL"
+        );
+
+    }
+
+
+    if(
+        activeCourses.includes(
+            "engineering"
+        )
+    ){
+
+        labels.push(
+            "ENGINEERING"
+        );
+
+    }
+
+
+    return labels.join(
+        " + "
+    );
+
+}
+
+
+/* =====================================================
+   UNLOCK LIBRARY
+===================================================== */
+
+async function unlockLibrary(){
+
+    document
+    .getElementById(
+        "loadingBox"
+    )
+    .style.display =
+    "none";
+
+
+    document
+    .getElementById(
+        "libraryContent"
+    )
+    .style.display =
+    "block";
+
+
+    document
+    .getElementById(
+        "courseBadge"
+    )
+    .textContent =
+    courseLabel();
+
+
+    await loadResources();
+
+}
+
+
+/* =====================================================
+   LOAD AUTHORIZED RESOURCES
+===================================================== */
+
+async function loadResources(){
+
+    try{
+
+        /*
+         * SECURITY:
+         *
+         * We use the Supabase RPC.
+         *
+         * The RPC checks:
+         *
+         * enrollments
+         *      ↓
+         * course_id
+         *      ↓
+         * courses.category
+         *      ↓
+         * library_resources.course_type
+         *
+         * So the browser does NOT simply
+         * download every library resource.
+         */
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient
+        .rpc(
+            "get_my_library_resources"
+        );
+
+
+        if(error){
+
+            console.error(
+                "Library RPC error:",
+                error
+            );
+
+            renderEmpty(
+                "Unable to load your library resources."
+            );
+
+            return;
+
+        }
+
+
+        resources =
+        data || [];
+
+
+        renderResources();
+
+    }catch(error){
+
+        console.error(
+            "Resource loading error:",
+            error
+        );
+
+        renderEmpty(
+            "Unable to load your library resources."
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   CATEGORY LABEL
+===================================================== */
+
+function categoryLabel(category){
+
+    const labels = {
+
+        "marked-books":
+        "দাগানো বই",
+
+        "question-bank":
+        "Question Bank",
+
+        "important-notes":
+        "Important Notes",
+
+        "formula-sheets":
+        "Formula Sheets",
+
+        "previous-questions":
+        "Previous Questions",
+
+        "short-tricks":
+        "Short Tricks"
+
+    };
+
+
+    return labels[
+        category
+    ] || category;
+
+}
+
+
+/* =====================================================
+   ICON
+===================================================== */
+
+function resourceIcon(category){
+
+    const icons = {
+
+        "marked-books":
+        "📕",
+
+        "question-bank":
+        "📝",
+
+        "important-notes":
+        "📒",
+
+        "formula-sheets":
+        "⚡",
+
+        "previous-questions":
+        "🧾",
+
+        "short-tricks":
+        "🧠"
+
+    };
+
+
+    return icons[
+        category
+    ] || "📚";
+
+}
+
+
+/* =====================================================
+   RENDER
+===================================================== */
+
+function renderResources(){
+
+    const grid =
+    document.getElementById(
+        "resourceGrid"
+    );
+
+
+    const search =
+    document.getElementById(
+        "searchInput"
+    )
+    .value
+    .toLowerCase()
+    .trim();
+
+
+    const filtered =
+    resources.filter(
+        resource => {
+
+            const categoryMatch =
+            activeCategory === "all" ||
+            resource.category ===
+            activeCategory;
+
+
+            const text =
+            (
+                resource.title +
+                " " +
+                (
+                    resource.description ||
+                    ""
+                )
+            )
+            .toLowerCase();
+
+
+            const searchMatch =
+            !search ||
+            text.includes(
+                search
+            );
+
+
+            return (
+                categoryMatch &&
+                searchMatch
+            );
+
+        }
+    );
+
+
+    grid.innerHTML = "";
+
+
+    if(
+        filtered.length === 0
+    ){
+
+        renderEmpty(
+            "No resources found."
+        );
+
+        return;
+
+    }
+
+
+    filtered.forEach(
+        (resource,index) => {
+
+            const card =
+            document.createElement(
+                "div"
+            );
+
+            card.className =
+            "resource";
+
+            card.style.animationDelay =
+            `${index * 60}ms`;
+
+
+            const icon =
+            document.createElement(
+                "div"
+            );
+
+            icon.className =
+            "resource-icon";
+
+            icon.textContent =
+            resourceIcon(
+                resource.category
+            );
+
+
+            const category =
+            document.createElement(
+                "div"
+            );
+
+            category.className =
+            "resource-category";
+
+            category.textContent =
+            categoryLabel(
+                resource.category
+            );
+
+
+            const title =
+            document.createElement(
+                "h3"
+            );
+
+            title.textContent =
+            resource.title;
+
+
+            const description =
+            document.createElement(
+                "p"
+            );
+
+            description.textContent =
+            resource.description ||
+            "Dream Hunt study resource.";
+
+
+            const button =
+            document.createElement(
+                "button"
+            );
+
+            button.className =
+            "resource-btn";
+
+
+            if(
+                resource.file_url &&
+                resource.file_url !== "#"
+            ){
+
+                button.textContent =
+                "Open Resource →";
+
+
+                button.onclick =
+                () => {
+
+                    window.open(
+                        resource.file_url,
+                        "_blank",
+                        "noopener"
+                    );
+
+                };
+
+            }else{
+
+                button.textContent =
+                "Coming Soon";
+
+                button.classList.add(
+                    "disabled"
+                );
+
+                button.disabled =
+                true;
+
+            }
+
+
+            card.appendChild(
+                icon
+            );
+
+            card.appendChild(
+                category
+            );
+
+            card.appendChild(
+                title
+            );
+
+            card.appendChild(
+                description
+            );
+
+            card.appendChild(
+                button
+            );
+
+
+            grid.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+function renderEmpty(message){
+
+    const grid =
+    document.getElementById(
+        "resourceGrid"
+    );
+
+
+    grid.innerHTML = `
+
+        <div class="empty">
+
+            📚
+
+            <br><br>
+
+            ${message}
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   FILTER
+===================================================== */
+
+document
+.querySelectorAll(".filter")
+.forEach(
+    button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                document
+                .querySelectorAll(
+                    ".filter"
+                )
+                .forEach(
+                    item => {
+
+                        item.classList.remove(
+                            "active"
+                        );
+
+                    }
+                );
+
+
+                button.classList.add(
+                    "active"
+                );
+
+
+                activeCategory =
+                button.dataset.category;
+
+
+                renderResources();
+
+            }
+        );
+
+    }
+);
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+document
+.getElementById(
+    "searchInput"
+)
+.addEventListener(
+    "input",
+    renderResources
+);
+
+
+/* =====================================================
+   START
+===================================================== */
+
+async function startLibrary(){
+
+    showOnly(
+        "loadingBox"
+    );
+
+
+    const user =
+    await getCurrentUser();
+
+
+    if(!user){
+
+        window.location.href =
+        "index.html";
+
+        return;
+
+    }
+
+
+    const enrolled =
+    await checkPaidEnrollment();
+
+
+    if(!enrolled){
+
+        return;
+
+    }
+
+
+    await unlockLibrary();
+
+}
+
+
+startLibrary();
+
+
+/* =====================================================
+   AUTH STATE
+===================================================== */
+
+supabaseClient.auth.onAuthStateChange(
+    (event, session) => {
+
+        if(
+            !session
+        ){
+
+            window.location.href =
+            "index.html";
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+
+</html>
