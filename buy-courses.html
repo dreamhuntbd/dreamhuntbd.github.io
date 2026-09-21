@@ -2117,30 +2117,29 @@ let appliedCoupon = "";
 
 
 /* =========================================================
-   MAIN PRICE
+   MAIN PACKAGE PRICES
 ========================================================= */
+
+const MAIN_PACKAGE_PRICES = {
+
+    1:100,
+    2:150,
+    3:200,
+    4:250
+
+};
+
 
 function getMainPrice(){
 
     const count =
         mainSelected.length;
 
-    if(count === 0)
-        return 0;
+    return (
+        MAIN_PACKAGE_PRICES[count] ||
+        0
+    );
 
-    if(count === 1)
-        return 100;
-
-    if(count === 2)
-        return 150;
-
-    if(count === 3)
-        return 200;
-
-    if(count === 4)
-        return 250;
-
-    return 0;
 }
 
 
@@ -2287,7 +2286,7 @@ function toggleAbroad(type){
 
 
 /* =========================================================
-   PU MODE
+   PUBLIC UNIVERSITY MODE
 ========================================================= */
 
 function setPUMode(mode){
@@ -2898,70 +2897,71 @@ function renderUnitAllResult(){
 
 
 /* =========================================================
-   PU PRICE
+   PUBLIC UNIVERSITY PRICES
 ========================================================= */
+
+const PU_FIXED_PRICES = {
+
+    1:100,
+    2:150,
+    3:200,
+    4:250,
+    5:300,
+    6:350
+
+};
+
+const PU_UNIVERSITY_ALL_PRICE = 500;
+
+const PU_UNIT_ALL_PRICE = 500;
+
 
 function getPUPrice(){
 
-    if(puUniversityAll)
-        return 500;
+    if(puUniversityAll){
+
+        return PU_UNIVERSITY_ALL_PRICE;
+
+    }
 
 
-    if(puUnitAll)
-        return 500;
+    if(puUnitAll){
+
+        return PU_UNIT_ALL_PRICE;
+
+    }
 
 
-    const count =
-        puFixed.length;
-
-
-    if(count === 0)
-        return 0;
-
-    if(count === 1)
-        return 100;
-
-    if(count === 2)
-        return 150;
-
-    if(count === 3)
-        return 200;
-
-    if(count === 4)
-        return 250;
-
-    if(count === 5)
-        return 300;
-
-    if(count === 6)
-        return 350;
-
-
-    return 0;
+    return (
+        PU_FIXED_PRICES[
+            puFixed.length
+        ] ||
+        0
+    );
 
 }
 
 
 /* =========================================================
-   ABROAD PRICE
+   ABROAD PRICES
 ========================================================= */
+
+const ABROAD_PRICES = {
+
+    1:300,
+    2:500
+
+};
+
 
 function getAbroadPrice(){
 
-    const count =
-        abroadSelected.length;
-
-
-    if(count === 0)
-        return 0;
-
-    if(count === 1)
-        return 300;
-
-    if(count === 2)
-        return 500;
-
-    return 0;
+    return (
+        ABROAD_PRICES[
+            abroadSelected.length
+        ] ||
+        0
+    );
 
 }
 
@@ -2983,29 +2983,6 @@ function getSubtotal(){
     const abroadPrice =
         getAbroadPrice();
 
-
-    /*
-       Main + PU pricing follows the
-       new package structure.
-    */
-
-    if(
-        mainSelected.length === 1 &&
-        puPrice > 0
-    ){
-
-        return (
-            mainPrice +
-            puPrice +
-            abroadPrice
-        );
-
-    }
-
-
-    /*
-       Multiple Main + PU
-    */
 
     return (
         mainPrice +
@@ -3146,7 +3123,7 @@ function getSelectedDisplayItems(){
                 `${puUniversityAll.university} — All Units`,
 
             price:
-                500
+                PU_UNIVERSITY_ALL_PRICE
 
         });
 
@@ -3190,7 +3167,7 @@ function getSelectedDisplayItems(){
                 matching.join(" • "),
 
             price:
-                500
+                PU_UNIT_ALL_PRICE
 
         });
 
@@ -4456,4 +4433,4 @@ checkCourses();
 </script>
 
 </body>
-    </html>
+            </html>
